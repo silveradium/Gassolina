@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,10 +16,15 @@
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		FB4010F02CEE4ECCB2109C0A /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CADB28D3F1D42E380F3BCC7 /* noop-file.swift */; };
+		36DA3CB89FB3438B83104B65 /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4AF1AE6674AF4F45934A270D /* Poppins-Light.ttf */; };
+		2AAA5A2658034D4D80C0D862 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C38E0877AFD24840BC459F36 /* Poppins-Medium.ttf */; };
+		5531735056D84B7BB1532A03 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CB576B3A4ED244DFB5B0153E /* Poppins-Regular.ttf */; };
+		D19EDB42957A4B8B99F0EBF7 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7562A92A25C4F2C99D2F4DB /* Poppins-SemiBold.ttf */; };
+		A811ED348C34492B87FE0BEF /* Tiny5-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7756512DB29A42EC823CD8A8 /* Tiny5-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0F41A6823B575F3D954A488E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = GassolinaApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		0F41A6823B575F3D954A488E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = GassolinaApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* GassolinaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GassolinaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = GassolinaApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = GassolinaApp/AppDelegate.mm; sourceTree = "<group>"; };
@@ -34,6 +39,11 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-GassolinaApp/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		4AF1AE6674AF4F45934A270D /* Poppins-Light.ttf */ = {isa = PBXFileReference; name = "Poppins-Light.ttf"; path = "../assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C38E0877AFD24840BC459F36 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CB576B3A4ED244DFB5B0153E /* Poppins-Regular.ttf */ = {isa = PBXFileReference; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D7562A92A25C4F2C99D2F4DB /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7756512DB29A42EC823CD8A8 /* Tiny5-Regular.ttf */ = {isa = PBXFileReference; name = "Tiny5-Regular.ttf"; path = "../assets/fonts/Tiny5-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +99,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
 				D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */,
+				6060B445B73343AD9C01910B /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -136,6 +147,19 @@
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
+		};
+		6060B445B73343AD9C01910B /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				4AF1AE6674AF4F45934A270D /* Poppins-Light.ttf */,
+				C38E0877AFD24840BC459F36 /* Poppins-Medium.ttf */,
+				CB576B3A4ED244DFB5B0153E /* Poppins-Regular.ttf */,
+				D7562A92A25C4F2C99D2F4DB /* Poppins-SemiBold.ttf */,
+				7756512DB29A42EC823CD8A8 /* Tiny5-Regular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -201,6 +225,11 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				A012C9C88D53DF8D95E2D966 /* PrivacyInfo.xcprivacy in Resources */,
+				36DA3CB89FB3438B83104B65 /* Poppins-Light.ttf in Resources */,
+				2AAA5A2658034D4D80C0D862 /* Poppins-Medium.ttf in Resources */,
+				5531735056D84B7BB1532A03 /* Poppins-Regular.ttf in Resources */,
+				D19EDB42957A4B8B99F0EBF7 /* Poppins-SemiBold.ttf in Resources */,
+				A811ED348C34492B87FE0BEF /* Tiny5-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,6 +341,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GassolinaApp/GassolinaApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V25CCJ3DZ5;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -319,7 +349,10 @@
 				);
 				INFOPLIST_FILE = GassolinaApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -344,9 +377,13 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GassolinaApp/GassolinaApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V25CCJ3DZ5;
 				INFOPLIST_FILE = GassolinaApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -414,7 +451,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD = "";
 				LDPLUSPLUS = "";
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -473,7 +513,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD = "";
 				LDPLUSPLUS = "";
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
