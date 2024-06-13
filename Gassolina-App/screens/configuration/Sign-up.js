@@ -24,13 +24,17 @@ export default function SignUp({ navigation }) {
             const errorMessage = error.message;
             console.log(errorMessage);
         })
-    }
-
-    const handlePrint = () => {
-        console.log(userInfo);   
         Keyboard.dismiss();
         setEmail('');
         setPassword('');
+        navigation.navigate('Wifi', {
+            itemId: userInfo,
+            otherParam: 'anything you want here',
+          });
+    }
+
+    const handlePrint = () => {
+        console.log(userInfo);  //needs to be removed
         navigation.navigate('Wifi', {
             itemId: userInfo,
             otherParam: 'anything you want here',
@@ -52,16 +56,10 @@ export default function SignUp({ navigation }) {
             onChangeText = {(text) => setPassword(text)}
             secureTextEntry
             />
-            {/* <TouchableOpacity style={styles.button} 
-            onPress={handleSignUp}
-            >
-            <View>
-                <Text style={styles.getstarted}>Get Started</Text>
-            </View>
-            </TouchableOpacity> */}
-            <GetStartedButton text="Sign-up" onPress={handlePrint} width={210}/>
+            <GetStartedButton text="Sign-up" onPress={handleSignUp} width={210}/>
     
-        </View> 
+        </View>
+        <Button title="Next" onPress={handlePrint} /> 
     </KeyboardAvoidingView> );
        
     
