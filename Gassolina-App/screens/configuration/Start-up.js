@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
-// import GetStartedButton from '../components/Get-started-button';
 
 
 export default function StartUp({ navigation}) {
@@ -12,7 +11,7 @@ export default function StartUp({ navigation}) {
     return (
       <View style={styles.container}> 
         <View style={styles.heading}>
-            <Text style={ styles.powered}>Powered By</Text>
+            <Text style={ styles.powered }>Powered By</Text>
             <Image source={require('../../assets/rysera-logo.png')} style={ styles.rysera } />
         </View>
         <Image source={require('../../assets/background.png')} style={ styles.background } />
@@ -33,7 +32,7 @@ export default function StartUp({ navigation}) {
                 <Text style={styles.getstarted}>Get Started</Text>
             </View>
         </TouchableOpacity>
-        {/* <GetStartedButton text="Get Started" /> */}
+        {/* <GetStartedButton text="Get Started" onPress={pressHandler} width={260}/> */}
       </View>
     );
   }
@@ -53,8 +52,10 @@ export default function StartUp({ navigation}) {
       },
     logoText: {
         color: 'rgba(0, 0, 0, 0.43)',
+        fontFamily: "MontserratAlternates-SemiBold",
         fontSize: 11,
     },
+
     heading: {
         position: 'absolute', 
         top: 20,
@@ -65,6 +66,7 @@ export default function StartUp({ navigation}) {
     },
     powered: {
         color: '#4E4B4F',
+        fontFamily: "MontserratAlternates-SemiBold",
         fontSize: 10,
         fontWeight: 400,
         letterSpacing: 1.2,
@@ -77,6 +79,7 @@ export default function StartUp({ navigation}) {
         height: 100,
         resizeMode: 'contain',
     },
+
     middle: {
       width: '100%',
       height: '50%',
@@ -85,6 +88,7 @@ export default function StartUp({ navigation}) {
       justifyContent: 'center',
       marginBottom: 30, 
     },
+
     top: {
       width: '100%',
       alignItems: 'center',
@@ -107,13 +111,13 @@ export default function StartUp({ navigation}) {
         fontFamily: "Poppins-SemiBold",
         fontSize: 40,
         fontWeight: 400,
-        letterSpacing: 4.2,
+        letterSpacing: 4,
         fontStyle: 'bold',
     },
     button: {
       position: 'absolute',
       bottom: 50,
-      width: 258,
+      width: 250,
       height: 45,
       borderRadius: 14,
       backgroundColor: '#5C94F7',
