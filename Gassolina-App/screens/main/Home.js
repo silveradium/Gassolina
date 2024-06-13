@@ -7,7 +7,11 @@ export default function Home() {
       return (
         <View style={styles.container}> 
             <Image source={require('../../assets/background.png')} style={ styles.background } />
-            <Text>Wifi</Text>
+            <View style={styles.top}>
+                <Text style={styles.name}>Hi Agra,</Text>
+                <Text style={styles.nameDescription}>Litro Gas Cylinder, 12.5kg</Text>
+            </View>
+            
 
         </View>
       );
@@ -16,8 +20,8 @@ export default function Home() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        //alignItems: 'center',
+        //justifyContent: 'center',
     },
     background: {
         position: 'absolute',
@@ -25,4 +29,21 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         zIndex: -1,
-        }})
+    },
+    top: {
+        marginTop: 50,
+        marginLeft: 20,
+    },
+    name: {
+        color: '#4E4B4F',
+        fontFamily: "Poppins-Medium",
+        fontSize: 30,
+        lineHeight: 'normal',
+    },
+    nameDescription: {
+        color: 'rgba(0, 0, 0, 0.43)',
+        fontFamily: "MontserratAlternates-Semibold",
+        fontSize: 11,
+        letterSpacing: 0.44,
+    }
+})

@@ -86,13 +86,15 @@ const styles = StyleSheet.create({
         height: 'auto',
         alignItems: 'center',
         borderRadius: 35,
+        shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
     },
+    
     signuo: {
         color: 'black',
         fontSize: 30,
         marginTop: 50,
         marginBottom: 50,
-        fontFamily: 'Poppins-Medium',
+        fontFamily: 'Poppins-SemiBold',
     },
     // button: {
     //     marginTop: 25,
