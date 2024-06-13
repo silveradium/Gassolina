@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-n
 // import GetStartedButton from '../components/Get-started-button';
 
 
-
 export default function StartUp({ navigation}) {
 
  
@@ -23,7 +22,7 @@ export default function StartUp({ navigation}) {
           <View style={styles.bottom}>
             <Image
             source={require('../../assets/logo.png')}
-            style={styles.image}
+            style={styles.logo}
           />
             <Text style={styles.logoText}>Productions</Text>
           </View>
@@ -97,8 +96,8 @@ export default function StartUp({ navigation}) {
       justifyContent: 'center',
       paddingTop: 30,
     },
-    image:{
-      width: 130,
+    logo:{
+      width: 110,
       height: 100,
       resizeMode: 'contain',
       marginBottom: 10,
