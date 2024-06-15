@@ -3,12 +3,16 @@ import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, Touchab
 import { useState } from 'react';
 
 
-export default function Wifi({ navigation }) {
+export default function Wifi({ route, navigation }) {
+
+  const { itemId, otherParam } = route.params;
+
   const [emails, setEmails] = useState(['']);
   const [email, setEmail] = useState('');
   const addEmail = (email) => {
     setEmails([...emails, email]);
     setEmail('');
+    console.log(itemId);
   }
   return (
     <View style={styles.container}>
