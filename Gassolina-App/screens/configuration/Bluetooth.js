@@ -5,18 +5,13 @@ import { atob, btoa } from "react-native-quick-base64";
 
 const bleManager = new BleManager();
 
-export default function Bluetooth( {navigation}) {
+export default function Bluetooth( {routes, navigation}) {
 
     const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
-    const STEP_DATA_CHAR_UUID = "beefcafe-36e1-4688-b7f5-00000000000b";
-    const ANOTHER_CHAR_UUID = "5248bd5c-ec57-443b-b249-5d5fb8da053d";
-    const SSID_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
-    const PASSWORD_UUID = "3235caec-c57e-41cb-a069-a22c49cb7a09";
+    const USER_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+
 
     const [deviceID, setDeviceID] = useState(null);
-    const [stepCount, setStepCount] = useState(0);
-    const [another, setAnother] = useState(0);
-    //const [stepDataChar, setStepDataChar] = useState(null); // Not Used
     const [connectionStatus, setConnectionStatus] = useState("Searching...");
 
     const deviceRef = useRef(null);
@@ -34,11 +29,8 @@ export default function Bluetooth( {navigation}) {
             connectToDevice(device);
         }
         });
+        navigation.navigate('Profile')
     };
-
-    // useEffect(() => {
-    //     searchAndConnectToDevice();
-    // }, []);
 
     const connectToDevice = (device) => {
         return device
@@ -58,9 +50,12 @@ export default function Bluetooth( {navigation}) {
           })
           .then((characteristics) => {
             let ssidCharacteristic = characteristics.find(
-              (char) => char.uuid ===  SSID_UUID
+              (char) => char.uuid ===  USER_UUID
             );
             sendDataToCharacteristic(ssidCharacteristic, "Dialog 4G");
+            sendDataToCharacteristic(ssidCharacteristic, "password123");
+            sendDataToCharacteristic(ssidCharacteristic, "password123");
+            sendDataToCharacteristic(ssidCharacteristic, "password123");
             sendDataToCharacteristic(ssidCharacteristic, "password123");
           })
           .catch((error) => {
@@ -82,125 +77,102 @@ export default function Bluetooth( {navigation}) {
 
       };
 
-      useEffect(() => {
-        const subscription = bleManager.onDeviceDisconnected(
-          deviceID,
-          (error, device) => {
-            if (error) {
-              console.log("Disconnected with error:", error);
-            }
-            setConnectionStatus("Disconnected");
-            console.log("Disconnected device");
-            setStepCount(0); // Reset the step count
-            if (deviceRef.current) {
-              setConnectionStatus("Reconnecting...");
-              connectToDevice(deviceRef.current)
-                .then(() => setConnectionStatus("Connected"))
-                .catch((error) => {
-                  console.log("Reconnection failed: ", error);
-                  setConnectionStatus("Reconnection failed");
-                });
-            }
-          }
-        );
-        return () => subscription.remove();
-      }, [deviceID]);
-
-
     return (
       <View style={styles.container}>
-        {/* <Image source={require('../assets/background.png')} style={ styles.background } /> */}
-        <View style={styles.content}><Text style={styles.title}>Pair With Gassolina</Text>
-            <Text style={styles.description}>Please pair with gassolina for a short period while we transfer the data</Text>
-        </View>
-        <View style={styles.bottomWrapper}>
+      <Image source={require('../../assets/background.png')} style={ styles.background } />
+      
+      <Text style={styles.steps}>Step 1/5</Text>
+      <View style={styles.top}>
+        <Text style={styles.heading}>Pair with Gassolina</Text>
+        <Text style={styles.description}>Please pair with Gassolina for a short period while we transfer the data</Text>
+
+        <Text style={styles.searchdes}>Please turn on Gassolina’s BT by pressing the Bluetooth button</Text>
+      </View>
+      <View style={styles.middle}>
+      <Image source={require('../../assets/ble-icon.png')} style={ styles.wifiIcon } />
+      </View>
+        <Button title="connect" onPress={searchAndConnectToDevice} />
         <Text style={styles.connectionStatus}>{connectionStatus}</Text>
-      </View>
-      <View style={styles.stepWrapper}>
-              <Text style={styles.steps}>{stepCount}</Text>
-        </View>
-        {/* <View style={styles.stepWrapper}>
-              <Text style={styles.steps}>{another}</Text>
-        </View> */}
-          
-            {/* <Image
-            source={require('../assets/logo.png')}
-            style={styles.image}
-          /> */}
-          <Button title="Search" onPress={searchAndConnectToDevice} />
-           
-        <TouchableOpacity style={styles.button} >
-            <View>
-                <Text style={styles.getstarted}>Get Started</Text>
-            </View>
-        </TouchableOpacity>
-      </View>
+    </View>
     );
   }
-
-    const styles = StyleSheet.create({
-        container: {
-        flex: 1,
-        backgroundColor: 'plum',
+ 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: 'plum',
+      alignItems: 'center',
+      // justifyContent: 'center',
+    },
+    background: {
+        position: 'absolute',
+        resizeMode: 'cover',
+        width: '100%',
+        height: '100%',
+        zIndex: -1,
+    },
+    steps: {
+      position: 'absolute',
+      top: 30, 
+      left: 20,
+      color: '#4E4B4F',
+      fontFamily: 'Poppins-Light',
+  },
+  top: {
+      //backgroundColor: 'white',
+      marginTop: 70,
+      //alignItems: 'center',
+      width: '90%',
+      //marginLeft: 30,
+    },
+    heading: {
+      color: "#4E4B4F",
+      fontFamily: "Poppins-Medium",
+      fontSize: 32,
+      lineHeight: "140.97%", /* 45.11px */
+  },
+  description:{
+    color: '#4E4B4F',
+    fontFamily: "Poppins-Light",
+      fontSize: 18,
+    marginBottom: 20,
+  },
+  searchbutton: {
+    color: '#4E4B4F',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 'auto',
+    width: 104,
+    borderRadius: 14, 
+    marginBottom: 10,
+  },
+  search: {
+    display: 'block ',
+    padding: 7,
+    color: '#4E4B4F',
+    fontFamily: "Poppins-Light",
+    fontSize: 15,
+  },
+  searchdes: {
+    color: '#4E4B4F',
+    fontFamily: "Poppins-Light",
+    fontSize: 14,
+  },
+  
+    middle: {
+        //width: '80%',
+        height: 'auto',
         alignItems: 'center',
-        //justifyContent: 'center',
-        flexDirection: 'column',
-        },
-        content: {
-            width: '87%',
-            //height: '50%',
-            marginTop: 80,
-            backgroundColor: 'white',
-            //alignItems: 'center',
-            //justifyContent: 'center',
-        },
-        title: {
-            color: '#4E4B4F',
-            fontFamily: 'Poppins',
-            fontSize: '32px',
-            marginBottom: 40,
-            fontWeight: '500',
-            },
-        background: {
-            position: 'absolute',
-            resizeMode: 'cover',
-            width: '100%',
-            height: '100%',
-            zIndex: -1,
-        },
-        description: {
-            color: '#4E4B4F',
-            fontFamily: 'Poppins',
-            fontSize: '18px',
-            fontStyle: 'normal',
-            fontweight: 400,
-        },
-        // middle: {
-        // width: '100%',
-        // height: '50%',
-        // //backgroundColor: 'plum',
-        // alignItems: 'center',
-        // flexDirection: 'column',
-        // justifyContent: 'center',
-        // marginBottom: 30,
-        
-        image: {
-        width: 100,
-        height: 100,
-        },
-        button: {
-            position: 'absolute',
-            bottom: 50,
-            width: 258,
-            height: 45,
-            borderRadius: '14px',
-            backgroundColor: '#5C94F7',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        getstarted: {
-            color: '#FFF',
-            fontSize: 16,
-            fontWeight: 600,
-        }
-    });
+        justifyContent: 'center',
+        borderRadius: 35,
+        shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+    },
+    emailgroup: {
+      width: '80%',
+      //height: 200,
+      backgroundColor: 'white',
+      borderRadius: 14,
+      padding: 10,
+    },
+  });

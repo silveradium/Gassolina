@@ -10,9 +10,10 @@ export default function Wifi({ route, navigation }) {
   const [emails, setEmails] = useState(['']);
   const [email, setEmail] = useState('');
   const addEmail = (email) => {
+    if (!email) return;
     setEmails([...emails, email]);
     setEmail('');
-    console.log(itemId);
+    console.log(itemId, otherParam);
   }
   return (
     <View style={styles.container}>

@@ -10,7 +10,8 @@ import GetStartedButton from '../../assets/components/MyButton';
 export default function SignUp({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userInfo, setUserInfo] = useState({uid: "", email: "", password: ""});
+    // const [userInfo, setUserInfo] = useState({uid: "", email: "", password: ""});
+    const [userInfo, setUserInfo] = useState([]);
 
     const handleSignUp = () => {
         auth()
@@ -19,7 +20,7 @@ export default function SignUp({ navigation }) {
             const user = userCredential.user;
             console.log('Registered with:', user.email);
             console.log('Registered with:', user.uid);
-            setUserInfo({uid: user.uid, email: email, password: password})
+            setUserInfo([email, passwor, user.uid]);
 
         })
         .catch(error => {
