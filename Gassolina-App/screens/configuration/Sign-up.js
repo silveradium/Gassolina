@@ -48,6 +48,7 @@ export default function SignUp({ navigation }) {
   }
   return ( <KeyboardAvoidingView style={styles.container} behavior="height">
     <Image source={require('../../assets/background.png')} style={ styles.background } />
+    <Text style={styles.steps}>Step 1/5</Text>
     <View style={styles.middle}>
         <Text style={styles.signuo}>Sign Up</Text>
         <TextInput style={styles.input} 
@@ -85,7 +86,13 @@ const styles = StyleSheet.create({
         height: '100%',
         zIndex: -1,
     },
-
+    steps: {
+      position: 'absolute',
+      top: 30, 
+      left: 20,
+      color: '#4E4B4F',
+      fontFamily: 'Poppins-Light',
+  },
     middle: {
         backgroundColor: 'white',
         width: '80%',
