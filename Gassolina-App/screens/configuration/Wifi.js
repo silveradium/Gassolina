@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'plum',
-    // alignItems: 'center',
+    alignItems: 'center',
     // justifyContent: 'center',
   },
   background: {
@@ -74,10 +74,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Light',
 },
 top: {
+    //backgroundColor: 'white',
     marginTop: 70,
     //alignItems: 'center',
     width: '90%',
-    marginLeft: 30,
+    //marginLeft: 30,
   },
   heading: {
     color: "#4E4B4F",
