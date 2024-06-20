@@ -2,14 +2,15 @@ import * as React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
 
-export default function Home() {
+export default function Home({route, navigation}) {
 
+    const { username, cylinderWeight } = route.params;
       return (
         <View style={styles.container}> 
             <Image source={require('../../assets/background.png')} style={ styles.background } />
             <View style={styles.top}>
-                <Text style={styles.name}>Hi Agra,</Text>
-                <Text style={styles.nameDescription}>Litro Gas Cylinder, 12.5kg</Text>
+                <Text style={styles.name}>Hi {username}</Text>
+                <Text style={styles.nameDescription}>Litro Gas Cylinder, {cylinderWeight}kg</Text>
             </View>
             
 

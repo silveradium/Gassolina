@@ -45,10 +45,10 @@ export default function StartUp({ navigation}) {
             <Text style={styles.description}>Please select your gas cylinder from the ones below</Text>
             <View style={styles.cylinders}>
               <TouchableOpacity style={[styles.box,selectedOption === 'option1' && styles.selected,]} onPress={() => {setCylinderWeight(2.0), handlePress("option1")}}><Text style={styles.weights}>2.0kg</Text></TouchableOpacity>
-              <TouchableOpacity style={[styles.box,selectedOption === 'option2' && styles.selected,]} onPress={() => {setCylinderWeight(2.0), handlePress("option2")}}><Text style={styles.weights}>2.3kg</Text></TouchableOpacity>
-              <TouchableOpacity style={[styles.box,selectedOption === 'option3' && styles.selected,]} onPress={() => {setCylinderWeight(2.0), handlePress("option3")}}><Text style={styles.weights}>5.0kg</Text></TouchableOpacity>
-              <TouchableOpacity style={[styles.box,selectedOption === 'option4' && styles.selected,]} onPress={() => {setCylinderWeight(2.0), handlePress("option4")}}><Text style={styles.weights}>12.5kg</Text></TouchableOpacity>
-              <TouchableOpacity style={[styles.box,selectedOption === 'option5' && styles.selected,]} onPress={() => {setCylinderWeight(2.0), handlePress("option5")}}><Text style={styles.weights}>37.5kg</Text></TouchableOpacity>
+              <TouchableOpacity style={[styles.box,selectedOption === 'option2' && styles.selected,]} onPress={() => {setCylinderWeight(2.3), handlePress("option2")}}><Text style={styles.weights}>2.3kg</Text></TouchableOpacity>
+              <TouchableOpacity style={[styles.box,selectedOption === 'option3' && styles.selected,]} onPress={() => {setCylinderWeight(5.0), handlePress("option3")}}><Text style={styles.weights}>5.0kg</Text></TouchableOpacity>
+              <TouchableOpacity style={[styles.box,selectedOption === 'option4' && styles.selected,]} onPress={() => {setCylinderWeight(12.5), handlePress("option4")}}><Text style={styles.weights}>12.5kg</Text></TouchableOpacity>
+              <TouchableOpacity style={[styles.box,selectedOption === 'option5' && styles.selected,]} onPress={() => {setCylinderWeight(37.5), handlePress("option5")}}><Text style={styles.weights}>37.5kg</Text></TouchableOpacity>
             </View>
             <View style={styles.bottom}>
               <TouchableOpacity style={styles.button} onPress={pressHandler}>

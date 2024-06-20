@@ -7,7 +7,8 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 const Tab = createBottomTabNavigator();
 
 
-export default function Main() {
+export default function Main({route}) {
+
   return (
     <Tab.Navigator initialRouteName='Home'>
                 <Tab.Group
@@ -19,7 +20,6 @@ export default function Main() {
                     right: 20,
                     height: 60,
                     paddingBottom: 20,
-                    //paddingTop: 10, 
                     borderRadius: 22,
                     ...styles.shadow,
                     },
@@ -43,7 +43,7 @@ export default function Main() {
                         </View>
                       ),
                     }} />
-                    <Tab.Screen name="Home" component={Home} options={{ 
+                    <Tab.Screen name="Home" component={Home} initialParams={route.params} options={{ 
                       tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
                           <Image
