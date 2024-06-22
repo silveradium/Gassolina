@@ -2,6 +2,10 @@ import * as React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { useEffect, useState } from 'react';
+import MaskedView from '@react-native-masked-view/masked-view';
+import SvgComponent from '../../assets/components/Svg';
+import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
+
 
 
 
@@ -10,6 +14,8 @@ export default function Home({route, navigation}) {
 
     const [loading, setLoading] = useState(true); // Set loading to true on component mount
     const [users, setUsers] = useState([]); // Initial empty array of users
+    const [weight, setWeight] = useState(0);
+    const marginTop = useSharedValue(0);
 
     useEffect(() => {
         const subscriber = firestore()
@@ -32,8 +38,14 @@ export default function Home({route, navigation}) {
         // Unsubscribe from events when no longer in use
         return () => subscriber();
       }, []);
-
-    console.log(users[0].myInteger);
+    
+    //   if (users.length > 0) {
+    //     console.log(users[0].myInteger);
+    //     setWeight(users[0].myInteger);
+    //   }
+    setWeight(50);
+    
+    marginTop.value = withSpring(-(weight / 100 * 300));
 
     const { username, cylinderWeight } = route.params;
 
@@ -44,10 +56,39 @@ export default function Home({route, navigation}) {
                 <Text style={styles.name}>Hi {username}</Text>
                 <Text style={styles.nameDescription}>Litro Gas Cylinder, {cylinderWeight}kg</Text>
             </View>
-            <View style={styles.middle}>
-                <Text style={styles.heading}>hiii</Text>
-            </View>
+
+            <MaskedView
+          style={styles.maskedView}
+          maskElement={
+            // <View style={styles.maskContainer}>
+            //   <Text style={styles.maskText}>Masked Text</Text>
+            // </View>
+            <SvgComponent style={styles.gas}/>
+          }
+        >
             
+             <Animated.View
+        style={{
+            flex: 1,
+          height: 200,
+          backgroundColor: '#324376',
+          marginTop
+        }}
+      />
+            <Animated.View
+        style={{
+            flex: 1,
+          height: 200,
+          backgroundColor: '#5C94F7',
+        
+        }}
+      />
+          {/* <View style={styles.background} /> */}
+        </MaskedView>
+        <Text style={styles.weight}>{weight}%</Text>
+        {/* <View style={styles.button}>
+        <Button onPress={handlePress} title="Click me"/>
+        </View> */}
 
         </View>
       );
@@ -57,6 +98,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         //alignItems: 'center',
+        //gay
         //justifyContent: 'center',
     },
     background: {
@@ -78,8 +120,33 @@ const styles = StyleSheet.create({
     },
     nameDescription: {
         color: 'rgba(0, 0, 0, 0.43)',
-        fontFamily: "MontserratAlternates-Semibold",
+        //fontFamily: "MontserratAlternates-Semibold",
         fontSize: 11,
         letterSpacing: 0.44,
-    }
+    },
+    maskedView: {
+        display: 'flex',
+        height: 300,
+        width: 300,
+        flexDirection: 'column',
+        left: 77,
+    
+      },
+      weight: {
+        marginTop: -220,
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 600,
+      },
+      
+      button: {
+        marginTop: 50,
+        color: 'red',
+      },
+      maskContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+      },
 })
