@@ -35,7 +35,7 @@ export default function Home({route, navigation}) {
             setLoading(false);
           });
       
-        // Unsubscribe from events when no longer in use
+  
         return () => subscriber();
       }, []);
     

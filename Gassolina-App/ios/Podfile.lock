@@ -956,9 +956,9 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXConstants (16.0.2):
     - ExpoModulesCore
-  - Expo (51.0.13):
+  - Expo (51.0.14):
     - ExpoModulesCore
-  - ExpoAsset (10.0.8):
+  - ExpoAsset (10.0.9):
     - ExpoModulesCore
   - ExpoFileSystem (17.0.1):
     - ExpoModulesCore
@@ -966,7 +966,7 @@ PODS:
     - ExpoModulesCore
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
-  - ExpoModulesCore (1.12.14):
+  - ExpoModulesCore (1.12.15):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.01.01.00)
@@ -2636,12 +2636,12 @@ SPEC CHECKSUMS:
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
-  Expo: 5fb0613e7cfc806c500400eabb96b1a75473be1b
-  ExpoAsset: 100b840e5dc1e1619df2d7c76441d33fb84a3202
+  Expo: 9c87c876b45a6934894ba5e9353ee94fdba48125
+  ExpoAsset: 39e60dc31b16e204a9949caf3edb6dcda322e667
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
   ExpoFont: 43b69559cef3d773db57c7ae7edd3cb0aa0dc610
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
-  ExpoModulesCore: 34384af04aa0ebb57895a3a6e173255b21c08b19
+  ExpoModulesCore: 3a373c4106dceac4174af5fe87eab3df875b15e3
   FBLazyVector: 4bc164e5b5e6cfc288d2b5ff28643ea15fa1a589
   Firebase: 26b040b20866a55f55eb3611b9fcf3ae64816b86
   FirebaseAppCheckInterop: 0dd062c9926a76332ca5711dbed6f1a9ac540b54
