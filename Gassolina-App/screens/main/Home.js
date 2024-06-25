@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, FlatList } from 'react-native';
 import { ActivityIndicator } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { useEffect, useState } from 'react';
 import MaskedView from '@react-native-masked-view/masked-view';
 import SvgComponent from '../../assets/components/Svg';
 import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
+
 
 
 
@@ -19,39 +20,57 @@ export default function Home({route, navigation}) {
     const marginTop = useSharedValue(0);
     const [shouldUpdate, setShouldUpdate] = useState(false);
 
+    // useEffect(() => {
+    //   const unsubscriber = firestore()
+    //   .collection("7nNXGvfQT4bHKC3iF8htlkjSJ6W2")
+    //   .orderBy("timestamp", "desc")
+    //     .onSnapshot(querySnapshot => {
+    //       const users = [];
+    
+    //       querySnapshot.forEach(documentSnapshot => {
+    //         users.push({
+    //           ...documentSnapshot.data(),
+    //           key: documentSnapshot.id,
+    //         });
+    //       });
+    
+    //       setUsers(users);
+    //       setLoading(false);
+    //     });
+    //     if (users.length > 0){
+    //       console.log(users[0].myInteger);
+    //       setWeight(users[0].myInteger);
+    //       setShouldUpdate(true);
+    //     }
+
+    //   // Unsubscribe from events when no longer in use
+    //   return () => unsubscriber();
+    // }, []);
+
+    // if (loading) {
+    //   return <ActivityIndicator />;
+    // }
+
     useEffect(() => {
-      const subscriber = firestore()
-      .collection("7nNXGvfQT4bHKC3iF8htlkjSJ6W2")
-      .orderBy("timestamp", "desc")
-        .onSnapshot(querySnapshot => {
-          const users = [];
-    
-          querySnapshot.forEach(documentSnapshot => {
-            users.push({
-              ...documentSnapshot.data(),
-              key: documentSnapshot.id,
-            });
+      const unsubscribe = firestore().collection('7nNXGvfQT4bHKC3iF8htlkjSJ6W2').orderBy("timestamp", "desc").onSnapshot(
+        (querySnapshot) => {
+          const usersList = [];
+          querySnapshot.forEach((doc) => {
+            usersList.push({ id: doc.id, ...doc.data() });
           });
-    
-          setUsers(users);
-          setLoading(false);
-        });
-        if (users.length > 0){
-          console.log(users[0].myInteger);
-          setWeight(users[0].myInteger);
-          setShouldUpdate(true);
+          setUsers(usersList);
+          console.log('Got Users collection result:', usersList);
+          setWeight(usersList[0].myInteger);
+          console.log(weight)
+        },
+        (error) => {
+          console.error('Error getting Users collection:', error);
         }
-        else{
-          setShouldUpdate(false);
-        }
-
-      // Unsubscribe from events when no longer in use
-      return () => subscriber();
+      );
+  
+      // Clean up the listener when the component unmounts
+      return () => unsubscribe();
     }, []);
-
-    if (loading) {
-      return <ActivityIndicator />;
-    }
 
     marginTop.value = withSpring(-(weight / 100 * 300));
 
@@ -96,11 +115,9 @@ export default function Home({route, navigation}) {
               </MaskedView>
               <Text style={styles.weight}>{Math.round(weight)}%</Text>
             </View>
+            <FlatList></FlatList>
    
-        
-        {/* <View style={styles.button}>
-        <Button onPress={handlePress} title="Click me"/>
-        </View> */}
+ 
 
         </View>
       );
@@ -134,7 +151,7 @@ const styles = StyleSheet.create({
         letterSpacing: 0.44,
     },
     middle: {
-        marginTop: 50,
+        marginTop: 40,
         alignItems: 'center',
         justifyContent: 'center',
         //backgroundColor: 'plum',
