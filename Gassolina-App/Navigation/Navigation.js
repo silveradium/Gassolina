@@ -11,7 +11,7 @@ const Stack = createStackNavigator();
 
 export default function Navigation() {
   return (
-    <Stack.Navigator initialRouteName="StartUp">
+    <Stack.Navigator initialRouteName="Profile">
         <Stack.Screen name="startup" component={StartUp} options={{headerShown: false}}/>
         <Stack.Screen name="SignUp" component={SignUp} options={{headerShown: false}}/>
         <Stack.Screen name="Wifi" component={Wifi} options={{headerShown: false}}/>

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { useEffect, useState } from 'react';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -11,43 +12,53 @@ import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
 
 
 export default function Home({route, navigation}) {
-
+//i
     const [loading, setLoading] = useState(true); // Set loading to true on component mount
     const [users, setUsers] = useState([]); // Initial empty array of users
     const [weight, setWeight] = useState(0);
     const marginTop = useSharedValue(0);
+    const [shouldUpdate, setShouldUpdate] = useState(false);
 
     useEffect(() => {
-        const subscriber = firestore()
-          .collection('7nNXGvfQT4bHKC3iF8htlkjSJ6W2')
-          .orderBy("timestamp", "desc")
-          .onSnapshot(querySnapshot => {
-            const users = [];
-      
-            querySnapshot.forEach(documentSnapshot => {
-              users.push({
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-              });
+      const subscriber = firestore()
+      .collection("7nNXGvfQT4bHKC3iF8htlkjSJ6W2")
+      .orderBy("timestamp", "desc")
+        .onSnapshot(querySnapshot => {
+          const users = [];
+    
+          querySnapshot.forEach(documentSnapshot => {
+            users.push({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
             });
-      
-            setUsers(users);
-            setLoading(false);
           });
-      
-  
-        return () => subscriber();
-      }, []);
     
-    //   if (users.length > 0) {
-    //     console.log(users[0].myInteger);
-    //     setWeight(users[0].myInteger);
-    //   }
-    setWeight(50);
-    
+          setUsers(users);
+          setLoading(false);
+        });
+        if (users.length > 0){
+          console.log(users[0].myInteger);
+          setWeight(users[0].myInteger);
+          setShouldUpdate(true);
+        }
+        else{
+          setShouldUpdate(false);
+        }
+
+      // Unsubscribe from events when no longer in use
+      return () => subscriber();
+    }, []);
+
+    if (loading) {
+      return <ActivityIndicator />;
+    }
+
     marginTop.value = withSpring(-(weight / 100 * 300));
 
     const { username, cylinderWeight } = route.params;
+
+    // username = "John Doe";
+    // cylinderWeight = 12.5;
 
       return (
         <View style={styles.container}> 
@@ -57,35 +68,36 @@ export default function Home({route, navigation}) {
                 <Text style={styles.nameDescription}>Litro Gas Cylinder, {cylinderWeight}kg</Text>
             </View>
 
-            <MaskedView
-          style={styles.maskedView}
-          maskElement={
-            // <View style={styles.maskContainer}>
-            //   <Text style={styles.maskText}>Masked Text</Text>
-            // </View>
-            <SvgComponent style={styles.gas}/>
-          }
-        >
-            
-             <Animated.View
-        style={{
-            flex: 1,
-          height: 200,
-          backgroundColor: '#324376',
-          marginTop
-        }}
-      />
-            <Animated.View
-        style={{
-            flex: 1,
-          height: 200,
-          backgroundColor: '#5C94F7',
+
+            <View style={styles.middle}>
+              <MaskedView
+                style={styles.maskedView}
+                maskElement={
+                  <SvgComponent style={styles.gas}/>
+                }
+              >
+              
+                <Animated.View
+                  style={{
+                      flex: 1,
+                    height: 200,
+                    backgroundColor: '#FAFAFA',
+                    marginTop
+                  }}
+                />
+                <Animated.View
+                  style={{
+                      flex: 1,
+                    height: 200,
+                    backgroundColor: '#5C94F7',
+                  
+                  }}
+                />
+              </MaskedView>
+              <Text style={styles.weight}>{Math.round(weight)}%</Text>
+            </View>
+   
         
-        }}
-      />
-          {/* <View style={styles.background} /> */}
-        </MaskedView>
-        <Text style={styles.weight}>{weight}%</Text>
         {/* <View style={styles.button}>
         <Button onPress={handlePress} title="Click me"/>
         </View> */}
@@ -97,9 +109,6 @@ export default function Home({route, navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //alignItems: 'center',
-        //gay
-        //justifyContent: 'center',
     },
     background: {
         position: 'absolute',
@@ -124,24 +133,33 @@ const styles = StyleSheet.create({
         fontSize: 11,
         letterSpacing: 0.44,
     },
+    middle: {
+        marginTop: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        //backgroundColor: 'plum',
+        shadowColor: 'black',
+        shadowOffset: {
+          width: 0,
+          height: -1,
+        },
+        shadowOpacity: 0.05,
+        shadowRadius: 5,
+        elevation: 2,
+    },
     maskedView: {
-        display: 'flex',
-        height: 300,
+        //display: 'flex',
+        height: 180,
         width: 300,
-        flexDirection: 'column',
-        left: 77,
-    
       },
       weight: {
-        marginTop: -220,
-        color: 'white',
-        fontSize: 20,
+        position: 'absolute',
+        paddingTop: 20,  
+        fontFamily: "Poppins-Semibold",
+        fontSize: 25,
         fontWeight: 600,
-      },
-      
-      button: {
-        marginTop: 50,
-        color: 'red',
+        color: "#F7F7F7",
+        
       },
       maskContainer: {
         flex: 1,
