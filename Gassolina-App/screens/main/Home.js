@@ -115,7 +115,12 @@ export default function Home({route, navigation}) {
               </MaskedView>
               <Text style={styles.weight}>{Math.round(weight)}%</Text>
             </View>
-            <FlatList></FlatList>
+            <FlatList style={styles.flatlist}>
+              <View style={styles.box}></View>
+              <View style={styles.box}></View>
+              <View style={styles.box}></View>
+              <View style={styles.box}></View>
+            </FlatList>
    
  
 
@@ -184,4 +189,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'transparent',
       },
+      // flatlist: {
+      //   display: 'flex',
+      //   flexDirection: 'row',
+      //   alignItems: 'flex-start',
+      //   //justifyContent: 'space-between',
+      //   gap: 18,
+      //   flexWrap: 'wrap',
+      // },
+      // box: {
+      //   backgroundColor: "white",
+      //   width: 50,
+      //   height: 50,
+      // }
 })
