@@ -17,6 +17,8 @@ export default function Bluetooth( {routes, navigation}) {
     const[discoveredDevices, setDiscoveredDevices] = useState([]);
     let services_arr = [];
     let characteristics_arr = [];
+    let pass_characteristic = null
+    let user_characteristic = null
 
     const deviceRef = useRef(null);
 
@@ -42,8 +44,7 @@ export default function Bluetooth( {routes, navigation}) {
         setTimeout(() => {
           bleManager.stopDeviceScan();
           setDiscoveredDevices(tempDevices);// them have to let user sleect the device onece selected rewoke the connectToDevice function
-          console.log(discoveredDevices);
-        }, 7000);
+        }, 5000);
       };
 
 
@@ -68,6 +69,11 @@ export default function Bluetooth( {routes, navigation}) {
               characteristics_arr.push(characteristic);
               characteristic.readDescriptor().then((descriptor) => {
                 console.log(descriptor.value);
+                if(descriptor.value === "pass"){
+                  pass_characteristic = characteristic.uuid;
+                } else if(descriptor.value === "user"){
+                  user_characteristic = characteristic.uuid;
+                }
               });
             });
           });
