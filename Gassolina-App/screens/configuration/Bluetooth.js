@@ -19,6 +19,7 @@ export default function Bluetooth( {routes, navigation}) {
     let characteristics_arr = [];
     let pass_characteristic = null
     let user_characteristic = null
+    let network_characteristic = null
 
     const deviceRef = useRef(null);
 
@@ -30,11 +31,6 @@ export default function Bluetooth( {routes, navigation}) {
             setConnectionStatus("Error searching for devices");
             return;
         }
-        // if (device.name === "Step-Sense") {
-        //     bleManager.stopDeviceScan();
-        //     setConnectionStatus("Connecting...");
-        //     connectToDevice(device);
-        // }
         if(device && !tempDevices.some(de => de.id === device.id)){
           tempDevices.push(device);
         }
@@ -69,10 +65,18 @@ export default function Bluetooth( {routes, navigation}) {
               characteristics_arr.push(characteristic);
               characteristic.readDescriptor().then((descriptor) => {
                 console.log(descriptor.value);
-                if(descriptor.value === "pass"){
-                  pass_characteristic = characteristic.uuid;
-                } else if(descriptor.value === "user"){
-                  user_characteristic = characteristic.uuid;
+                switch (descriptor.value) {
+                  case "pass":
+                    pass_characteristic = characteristic.uuid;
+                    break;
+                  case "user":
+                    user_characteristic = characteristic.uuid;
+                    break;
+                  case "networks":
+                    network_characteristic = characteristic.uuid;
+                    break;
+                  default:
+                    break;
                 }
               });
             });
