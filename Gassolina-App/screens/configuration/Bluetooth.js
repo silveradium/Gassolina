@@ -14,68 +14,107 @@ export default function Bluetooth( {routes, navigation}) {
     const [deviceID, setDeviceID] = useState(null);
     const [connectionStatus, setConnectionStatus] = useState("Searching...");
 
+    const[discoveredDevices, setDiscoveredDevices] = useState([]);
+    let services_arr = [];
+    let characteristics_arr = [];
+    let pass_characteristic = null
+    let user_characteristic = null
+    let network_characteristic = null
+
     const deviceRef = useRef(null);
 
     const searchAndConnectToDevice = () => {
+        let tempDevices = [];
         bleManager.startDeviceScan(null, null, (error, device) => {
         if (error) {
             console.error(error);
             setConnectionStatus("Error searching for devices");
             return;
         }
-        if (device.name === "Step-Sense") {
-            bleManager.stopDeviceScan();
-            setConnectionStatus("Connecting...");
-            connectToDevice(device);
+        if(device && !tempDevices.some(de => de.id === device.id)){
+          tempDevices.push(device);
         }
         });
         navigation.navigate('Profile')
-    };
 
-    const connectToDevice = (device) => {
-        return device
-          .connect()
-          .then((device) => {
-            setDeviceID(device.id);
-            setConnectionStatus("Connected");
-            deviceRef.current = device;
-            return device.discoverAllServicesAndCharacteristics();
-          })
-          .then((device) => {
-            return device.services();
-          })
-          .then((services) => {
-            let service = services.find((service) => service.uuid === SERVICE_UUID);
-            return service.characteristics();
-          })
-          .then((characteristics) => {
-            let ssidCharacteristic = characteristics.find(
-              (char) => char.uuid ===  USER_UUID
-            );
-            sendDataToCharacteristic(ssidCharacteristic, "Dialog 4G");
-            sendDataToCharacteristic(ssidCharacteristic, "password123");
-            sendDataToCharacteristic(ssidCharacteristic, "password123");
-            sendDataToCharacteristic(ssidCharacteristic, "password123");
-            sendDataToCharacteristic(ssidCharacteristic, "password123");
-          })
-          .catch((error) => {
-            console.log(error);
-            setConnectionStatus("Error in Connection");
+        setTimeout(() => {
+          bleManager.stopDeviceScan();
+          setDiscoveredDevices(tempDevices);// them have to let user sleect the device onece selected rewoke the connectToDevice function
+        }, 5000);
+      };
+
+
+    const connectToGassolina = (device) => {
+      bleManager.connectToDevice(device.id)
+      .then((device) => {
+        setConnectionStatus("Connected");
+        console.log("Connected to Gassolina");
+        deviceRef.current = device;
+        return device.discoverAllServicesAndCharacteristics();
+      })
+      .then((device) => {
+        return device.services();
+      })
+      .then((services) => {
+        services.forEach((service) => {
+          console.log(service.uuid);
+          services_arr.push(service);
+          service.characteristics().then((characteristics) => {
+            characteristics.forEach((characteristic) => {
+              console.log(characteristic.uuid);
+              characteristics_arr.push(characteristic);
+              characteristic.readDescriptor().then((descriptor) => {
+                console.log(descriptor.value);
+                switch (descriptor.value) {
+                  case "pass":
+                    pass_characteristic = characteristic.uuid;
+                    break;
+                  case "user":
+                    user_characteristic = characteristic.uuid;
+                    break;
+                  case "networks":
+                    network_characteristic = characteristic.uuid;
+                    break;
+                  default:
+                    break;
+                }
+              });
+            });
           });
-      };
-
-      const sendDataToCharacteristic = (characteristic, data) => {
-        
-        const encodedData = btoa(data);// Base64 encode the data if needed
-        characteristic.writeWithResponse(encodedData) // or .writeWithoutResponse(encodedData) depending on your requirement
-        .then(() => {
-          console.log("Data sent successfully");
-        })
-        .catch((error) => {
-          console.log("Error sending data:", error);
         });
+      })
+    }
 
-      };
+    const readDataFromCharacteristic = (characteristic) => {
+      bleManager.readCharacteristicForDevice(deviceRef.current.id, characteristic.serviceUUID, characteristic.uuid)
+      .then((data) => {
+        console.log("Data read from characteristic:", data);
+      })
+    }
+
+    const writeDataToCharacteristic = (characteristic, data) => {
+      bleManager.writeCharacteristicWithResponseForDevice(deviceRef.current.id, characteristic.serviceUUID, characteristic.uuid, data)
+      .then(() => {
+        console.log("Data written to characteristic successfully");
+      })
+      .catch((error) => {
+        console.log("Error writing data to characteristic:", error);
+      });
+    }
+
+
+      // const sendDataToCharacteristic = (characteristic, data) => {
+        
+      //   const encodedData = btoa(data);// Base64 encode the data if needed
+      //   characteristic.writeWithResponse(encodedData) // or .writeWithoutResponse(encodedData) depending on your requirement
+      //   .then(() => {
+      //     console.log("Data sent successfully");
+      //   })
+      //   .catch((error) => {
+      //     console.log("Error sending data:", error);
+      //   });
+
+      // };
 
     return (
       <View style={styles.container}>
@@ -92,6 +131,11 @@ export default function Bluetooth( {routes, navigation}) {
       <Image source={require('../../assets/ble-icon.png')} style={ styles.wifiIcon } />
       </View>
         <Button title="connect" onPress={searchAndConnectToDevice} />
+        <scrollView>
+          {discoveredDevices.map((device) =>  (
+            <Button key={device.id} title={device.name} onPress={() => connectToGassolina(device)} />
+            ))}
+        </scrollView>
         <Text style={styles.connectionStatus}>{connectionStatus}</Text>
     </View>
     );
