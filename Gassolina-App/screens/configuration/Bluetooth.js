@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { BleManager } from "react-native-ble-plx";
 import { useState, useEffect, useRef } from "react";
 import { atob, btoa } from "react-native-quick-base64";
@@ -131,11 +131,11 @@ export default function Bluetooth( {routes, navigation}) {
       <Image source={require('../../assets/ble-icon.png')} style={ styles.wifiIcon } />
       </View>
         <Button title="connect" onPress={searchAndConnectToDevice} />
-        <scrollView>
+        <ScrollView>
           {discoveredDevices.map((device) =>  (
             <Button key={device.id} title={device.name} onPress={() => connectToGassolina(device)} />
             ))}
-        </scrollView>
+        </ScrollView>
         <Text style={styles.connectionStatus}>{connectionStatus}</Text>
     </View>
     );
