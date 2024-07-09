@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Navigation from './Navigation/Navigation';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import FirebaseProvider from './Firebase/firebase';
 
 
 export default function App() {
@@ -22,9 +23,11 @@ export default function App() {
     return null;
   }
   return (
+    <FirebaseProvider>
     <NavigationContainer>
       <Navigation />
     </NavigationContainer>
+    </FirebaseProvider>
     
   );
 }

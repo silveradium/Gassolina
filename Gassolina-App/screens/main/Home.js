@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import MaskedView from '@react-native-masked-view/masked-view';
 import SvgComponent from '../../assets/components/Svg';
 import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
-
+import { useFirebase } from '../../Firebase/firebase';
 
 
 
@@ -19,6 +19,10 @@ export default function Home({route, navigation}) {
     const [weight, setWeight] = useState(0);
     const marginTop = useSharedValue(0);
     const [shouldUpdate, setShouldUpdate] = useState(false);
+    const user = useFirebase();
+
+    console.log("first data",user);
+
 
     // useEffect(() => {
     //   const unsubscriber = firestore()
