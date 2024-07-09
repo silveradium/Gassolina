@@ -1,20 +1,110 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Keyboard, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Keyboard, Button, ScrollView, FlatList } from 'react-native';
 import { useState } from 'react';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
+
+const wifi = [
+  {
+    id: 1,
+    name: 'Wifi 1',
+    password: null
+  },
+  {
+    id: 2,
+    name: 'Wifi 2',
+    password: null
+  },
+  {
+    id: 3,
+    name: 'Wifi 3',
+    password: null
+  },
+  {
+    id: 4,
+    name: 'Wifi 4',
+    password: null
+  },
+  {
+    id: 5,
+    name: 'Wifi 5',
+    password: null
+  },
+  {
+    id: 6,
+    name: 'Wifi 4',
+    password: null
+  },
+  {
+    id: 7,
+    name: 'Wifi 5',
+    password: null
+  },
+]
+
+
+
+const WifiCard = ({ item, expanded, onPress }) => {
+  const [password, setPassword] = useState('');
+
+//when password is submitted
+const onSubmitPassword = () => {
+  Keyboard.dismiss();
+  console.log(password);
+  setPassword('');
+
+
+}
+  return (
+    <View style={styles.wifiGroup}>
+      <TouchableWithoutFeedback style={styles.displayName} onPress= {onPress}>
+        <Image source={require('../../assets/wifi-icon.png')} style={ styles.wifiIconFlatlist } />
+        <Text style={styles.wifiNames} >{item.name}</Text>
+      </TouchableWithoutFeedback>
+      {expanded && (<View style={{flexDirection: 'row', justifyContent: 'space-between'}}><TextInput style={styles.input} 
+      placeholder='Wifi Password'
+      value = {password}
+      onChangeText={(text) => setPassword(text)}
+      /><Button title=">" onPress={onSubmitPassword} style={{fontFamily: 'Poppins-Light'}}/></View>)}
+      
+    </View>
+  )
+}
 
 export default function Wifi({ route, navigation }) {
 
   const { itemId, otherParam } = route.params;
 
   const [emails, setEmails] = useState(['']);
-  const [email, setEmail] = useState('');
+  const [expandedId, setExpandedId] = useState(null);
+
+  const renderItem = ({ item }) => {
+    const isExpanded = item.id === expandedId;
+    return (
+      <WifiCard
+        item={item}
+        expanded={isExpanded}
+        onPress={() => setExpandedId(isExpanded ? null : item.id)}
+      />
+    );
+  };
+
   const addEmail = (email) => {
     if (!email) return;
     setEmails([...emails, email]);
     setEmail('');
     console.log(itemId, otherParam);
   }
+
+
+  const displayWifi = () => {
+
+  }
+
+  const ItemSeparator = () => {
+    return <View style={styles.separator} />;
+  };
+
   return (
     <View style={styles.container}>
       <Image source={require('../../assets/background.png')} style={ styles.background } />
@@ -23,8 +113,11 @@ export default function Wifi({ route, navigation }) {
       <View style={styles.top}>
         <Text style={styles.heading}>Connect Gassolina to Wifi</Text>
         <Text style={styles.description}>Please select a wifi to connect with gassolina</Text>
-        <TouchableOpacity style={styles.searchbutton} onPress={() => navigation.navigate('Bluetooth')}>
+        <TouchableOpacity style={styles.searchbutton} onPress={displayWifi}>
             <Text style={styles.search}>Search</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.searchbutton} onPress={() => navigation.navigate('Bluetooth')}>
+            <Text style={styles.search}>Next</Text>
         </TouchableOpacity>
         <Text style={styles.searchdes}>Please turn on your Wifi.....</Text>
       </View>
@@ -34,20 +127,15 @@ export default function Wifi({ route, navigation }) {
       <Image source={require('../../assets/wifi-icon.png')} style={ styles.wifiIcon } />
       </View>
       <View style={styles.bottom}> 
-      <TextInput style={styles.input} 
-        placeholder='Email'
-        value = {email}
-        onChangeText = {(text) => setEmail(text)}
-        /><Button title="Add Email" onPress={() => addEmail(email)} />
-      <ScrollView style={styles.emailgroup}>
-        { emails.map((email) => {
-          return (
-            <TouchableOpacity key={email} onPress={() => navigation.navigate('Wifi')}>
-              <Text>{email}</Text>
-            </TouchableOpacity>
-          )
-        })}
-      </ScrollView>
+        <FlatList
+            style={{width: '90%'}}
+            data={wifi}
+            keyExtractor={item => item.id}
+            ListHeaderComponent={<Text style={styles.flatlistTitle}>Tap to select and enter password</Text>}
+            renderItem={ renderItem }
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={ItemSeparator}
+        />
       </View>
     </View>
   );
@@ -75,11 +163,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Light',
 },
 top: {
-    //backgroundColor: 'white',
     marginTop: 70,
-    //alignItems: 'center',
     width: '90%',
-    //marginLeft: 30,
   },
   heading: {
     color: "#4E4B4F",
@@ -116,19 +201,58 @@ searchdes: {
   fontSize: 14,
 },
 
-  middle: {
-      //width: '80%',
-      height: 'auto',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: 35,
-      shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-  },
-  emailgroup: {
-    width: '80%',
-    //height: 200,
+middle: {
+    height: 'auto',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.5,
+    elevation: 2,
+},
+  bottom: {
+    flex: 1,
+    width: '90%',
+    height: 'auto', 
     backgroundColor: 'white',
-    borderRadius: 14,
+    borderRadius: 20,
     padding: 10,
+    alignItems: 'center',
   },
+  wifiGroup: {
+    width: '100%',
+    borderRadius: 14,
+    padding: 3,
+  },
+  displayName: {
+    flexDirection: 'row',
+    alignItems: "center"
+  },
+  separator: {
+    width: '100%',
+    height: 1,
+    backgroundColor: '#ccc',
+    marginVertical: 5,
+  },
+  wifiIconFlatlist: {
+    width: 25,
+    height: 25,
+    marginRight: 10,
+    tintColor: '#4E4B4F'
+  },
+  wifiNames: {
+    fontFamily: "Poppins-Light",
+    color: "#4E4B4F",
+  },
+  flatlistTitle: {
+    fontFamily: "Poppins-Regular",
+    color: "#4E4B4F",
+    fontSize: 15,
+    marginTop:5,
+    marginBottom: 12
+  }
 });
