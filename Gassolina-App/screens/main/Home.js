@@ -20,7 +20,6 @@ export default function Home({route, navigation}) {
     const marginTop = useSharedValue(0);
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const user = useFirebase();
-    let array = [];
 
     console.log("first data",user);
 
@@ -60,16 +59,22 @@ export default function Home({route, navigation}) {
       const unsubscribe = firestore().collection('7nNXGvfQT4bHKC3iF8htlkjSJ6W2').orderBy("timestamp", "asc").onSnapshot(
         (querySnapshot) => {
           const usersList = [];
-          let newWeightsArray = [];
+//          let newWeightsArray = [];
+          let weightArray = [];
+          let timestampArray = [];
           let previousWeight = null;
           querySnapshot.forEach((doc) => {
             usersList.push({ id: doc.id, ...doc.data() });
 
-            newWeightsArray.push({ weight: doc.data().myInteger, timestamp: doc.data().timestamp });
+            // newWeightsArray.push({ weight: doc.data().myInteger, timestamp: doc.data().timestamp });
+            weightArray.push(doc.data().myInteger);
+            timestampArray.push(doc.data().timestamp.seconds);
 
             if (previousWeight !== null && previousWeight < doc.data().myInteger - 10) {
-              newWeightsArray.length = 0;
-              newWeightsArray.push(doc.data().myInteger);
+              weightArray.length = 0;
+              timestampArray.length = 0;
+              weightArray.push(doc.data().myInteger);
+              timestampArray.push(doc.data().timestamp.seconds);
             }
 
             previousWeight = doc.data().myInteger;
@@ -77,10 +82,13 @@ export default function Home({route, navigation}) {
           });
           setUsers(usersList);
           console.log('Got Users collection result:', usersList);
-          console.log('Got Users collection result:', newWeightsArray);
+          // console.log('Got Users collection result:', newWeightsArray);
           setWeight(usersList[0].myInteger);
-          console.log(weight)
-          console.log(array);
+          console.log(weight);
+          console.log(weightArray);
+          console.log(timestampArray);
+
+          //regression function
         },
         (error) => {
           console.error('Error getting Users collection:', error);
