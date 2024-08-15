@@ -18,7 +18,8 @@ export default function Home({route, navigation}) {
     const [users, setUsers] = useState([]); // Initial empty array of users
     const [weight, setWeight] = useState(0);
     const marginTop = useSharedValue(0);
-    const [shouldUpdate, setShouldUpdate] = useState(false);
+    const [endData, setEndData] = useState([]);
+    const [batteryLevel, setBatteryLevel] = useState([]);
     const user = useFirebase();
 
     console.log("first data",user);
@@ -89,6 +90,15 @@ export default function Home({route, navigation}) {
           console.log(timestampArray);
 
           //regression function
+          const ss = require('simple-statistics');
+
+          const xValues = weightArray;
+          const yValues = timestampArray;
+
+          const regressionLine = ss.linearRegressionLine(ss.linearRegression(xValues.map((x, i) => [x, yValues[i]])));
+
+          console.log(new Date(Math.round(regressionLine(0)*1000)));
+
         },
         (error) => {
           console.error('Error getting Users collection:', error);
