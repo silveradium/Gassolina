@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { BarChart } from "react-native-gifted-charts";
 import firestore from '@react-native-firebase/firestore';
+import { useEffect, useState } from 'react';
 
 function Daily() {
     const barData = [
@@ -15,6 +16,49 @@ function Daily() {
         {value: 256, label: 'S'},
         {value: 300, label: 'S'},
     ];
+
+    const [percentageWeight, setPercentageWeight] = useState(0);  
+    const [daysRemaining, setDaysRemaining] = useState(null);
+    const [users, setUsers] = useState([]); // Initial empty array of users
+
+    useEffect(() => {
+      const unsubscribe = firestore().collection('7nNXGvfQT4bHKC3iF8htlkjSJ6W2').orderBy("timestamp", "asc").onSnapshot(
+        (querySnapshot) => {
+          const usersList = [];
+          let weightArray = [];
+          let timestampArray = [];
+          let newWeightsArray = [];
+          querySnapshot.forEach((doc) => {
+            usersList.push({ id: doc.id, ...doc.data() });
+
+            newWeightsArray.push({ weight: doc.data().myInteger, timestamp: new Date(doc.data().timestamp.seconds * 1000) });
+            // weightArray.push(doc.data().myInteger);
+            // timestampArray.push(new Date(doc.data().timestamp.seconds * 1000));
+
+          });
+          
+
+
+          setUsers(usersList);
+          console.log('Got Users collection result:', usersList);
+          // console.log(weightArray.length);
+          console.log(newWeightsArray);
+          // console.log(weightArray);
+          // console.log(timestampArray);
+          
+    
+            // Cleanup the timer if the component unmounts
+            return () => clearTimeout(timer);
+
+        },
+        (error) => {
+          console.error('Error getting Users collection:', error);
+        },
+      );
+  
+      // Clean up the listener when the component unmounts
+      return () => unsubscribe();
+    }, []);
 
 
   return (
