@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { BarChart } from "react-native-gifted-charts";
+import firestore from '@react-native-firebase/firestore';
 
 function Daily() {
     const barData = [
@@ -14,6 +15,8 @@ function Daily() {
         {value: 256, label: 'S'},
         {value: 300, label: 'S'},
     ];
+
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "white", borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
       <View>

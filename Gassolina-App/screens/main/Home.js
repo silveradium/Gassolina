@@ -23,7 +23,7 @@ export default function Home({route, navigation}) {
     const marginTop = useSharedValue(0);
     const heightTop = useSharedValue(0);
     const heightBottom = useSharedValue(180);
-    const [endDate, setEndDate] = useState(null);
+    const [daysRemaining, setDaysRemaining] = useState(null);
     const [batteryLevel, setBatteryLevel] = useState([]);
     const user = useFirebase();
 
@@ -58,9 +58,10 @@ export default function Home({route, navigation}) {
 
 
           setUsers(usersList);
-          console.log('Got Users collection result:', usersList);
+          // console.log('Got Users collection result:', usersList);
           console.log(weightArray.length);
           setPercentageWeight(Math.round((previousWeight - cylinderWeight)/(40 - cylinderWeight)*100));
+          setWeight(previousWeight);
           console.log("weight", (previousWeight - cylinderWeight));
           console.log(weightArray);
           console.log(timestampArray);
@@ -72,8 +73,17 @@ export default function Home({route, navigation}) {
           const yValues = timestampArray;
 
           const regressionLine = ss.linearRegressionLine(ss.linearRegression(xValues.map((x, i) => [x, yValues[i]])));
-          setEndDate();
-          console.log(new Date(Math.round(regressionLine(0)*1000)));
+
+            const timer = setTimeout(() => {
+                const differenceMili = regressionLine(0) * 1000 - new Date().getTime();
+                const days = Math.floor(differenceMili / (1000 * 60 * 60 * 24));
+                console.log(days);
+                const date = new Date(Math.round(regressionLine(0) * 1000));  
+                setDaysRemaining(days);
+            }, 1000);
+    
+            // Cleanup the timer if the component unmounts
+            return () => clearTimeout(timer);
 
         },
         (error) => {
@@ -124,12 +134,18 @@ export default function Home({route, navigation}) {
             </View>
             <View style={styles.bottom}>
               <View style={styles.bottomTopBox}>
-                <Text>Top Box</Text>
-                <Text>hi</Text>
+                <Text style={styles.boxTitle}>Remaining Days Estimated:</Text>
+                <Text style={styles.boxDescription}>{daysRemaining} {daysRemaining === 1? "day": "days"}</Text> 
               </View>
               <View style={styles.bottomDownBox}>
-                <View style={styles.leftBox}></View>
-                <View style={styles.rightBox}></View>
+                <View style={styles.leftBox}>
+                <Text style={styles.boxTitleBottom}>Current Weight:</Text>
+                <Text style={styles.boxDescription}>{weight}Kg</Text>
+                </View>
+                <View style={styles.rightBox}>
+                <Text style={styles.boxTitleBottom}>Battery Level:</Text>
+                <Text style={styles.boxDescription}>80%</Text>
+                </View>
               </View>
             </View>
    
@@ -208,11 +224,12 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
       },
       bottomTopBox: {
-        width: 300,
+        width: 320,
         height: 90,
         backgroundColor: '#F7F7F7',
         borderRadius: 20,
         padding: 15,
+        paddingLeft: 20,
         shadowColor: 'black',
         shadowOffset: {
           width: 0,
@@ -223,14 +240,15 @@ const styles = StyleSheet.create({
         elevation: 2,
       },
       bottomDownBox: {
-        width: 300,
+        width: 320,
         marginTop: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
       },
       leftBox: {
-        width: 145,
+        width: 155,
         height: 90,
+        padding: 10,
         backgroundColor: '#F7F7F7',
         borderRadius: 20,
         shadowColor: 'black',
@@ -243,8 +261,9 @@ const styles = StyleSheet.create({
         elevation: 2,
       },
       rightBox: {
-        width: 145,
+        width: 155,
         height: 90,
+        padding: 10,
         backgroundColor: '#F7F7F7',
         borderRadius: 20,
         shadowColor: 'black',
@@ -256,4 +275,25 @@ const styles = StyleSheet.create({
         shadowRadius: 3.5,
         elevation: 2,
       },
+      boxTitle: {
+        color: '#4E4B4F',
+        fontFamily: "Poppins-Regular",
+        fontSize: 18,
+        lineHeight: 'normal',
+      },
+      boxTitleBottom: {
+        color: '#4E4B4F',
+        fontFamily: "Poppins-Regular",
+        fontSize: 17,
+        lineHeight: 'normal',
+      },
+      boxDescription: {
+        color: "#4E4B4F",
+        marginTop: 5,
+        marginLeft: 5,
+        fontFamily: "MontserratAlternates-SemiBold",
+        fontSize: 24,
+        lineHeight: 'normal',
+      },
+
   })
