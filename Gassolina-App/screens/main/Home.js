@@ -40,7 +40,7 @@ export default function Home({route, navigation}) {
           let previousWeight = null;
           querySnapshot.forEach((doc) => {
             usersList.push({ id: doc.id, ...doc.data() });
-
+//ugugugu
             // newWeightsArray.push({ weight: doc.data().myInteger, timestamp: doc.data().timestamp });
             weightArray.push(doc.data().myInteger - cylinderWeight);
             timestampArray.push(doc.data().timestamp.seconds);
