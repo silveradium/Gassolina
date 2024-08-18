@@ -13,54 +13,28 @@ import { useFirebase } from '../../Firebase/firebase';
 
 
 export default function Home({route, navigation}) {
-//i
+
+    const { username, cylinderWeight } = route.params;
+
     const [loading, setLoading] = useState(true); // Set loading to true on component mount
     const [users, setUsers] = useState([]); // Initial empty array of users
     const [weight, setWeight] = useState(0);
+    const [percentageWeight, setPercentageWeight] = useState(0);  
     const marginTop = useSharedValue(0);
-    const [endData, setEndData] = useState([]);
+    const heightTop = useSharedValue(0);
+    const heightBottom = useSharedValue(180);
+    const [endDate, setEndDate] = useState(null);
     const [batteryLevel, setBatteryLevel] = useState([]);
     const user = useFirebase();
 
-    console.log("first data",user);
+    // console.log("first data",user);
 
-
-    // useEffect(() => {
-    //   const unsubscriber = firestore()
-    //   .collection("7nNXGvfQT4bHKC3iF8htlkjSJ6W2")
-    //   .orderBy("timestamp", "desc")
-    //     .onSnapshot(querySnapshot => {
-    //       const users = [];
-    
-    //       querySnapshot.forEach(documentSnapshot => {
-    //         users.push({
-    //           ...documentSnapshot.data(),
-    //           key: documentSnapshot.id,
-    //         });
-    //       });
-    
-    //       setUsers(users);
-    //       setLoading(false);
-    //     });
-    //     if (users.length > 0){
-    //       console.log(users[0].myInteger);
-    //       setWeight(users[0].myInteger);
-    //       setShouldUpdate(true);
-    //     }
-
-    //   // Unsubscribe from events when no longer in use
-    //   return () => unsubscriber();
-    // }, []);
-
-    // if (loading) {
-    //   return <ActivityIndicator />;
-    // }
 
     useEffect(() => {
       const unsubscribe = firestore().collection('7nNXGvfQT4bHKC3iF8htlkjSJ6W2').orderBy("timestamp", "asc").onSnapshot(
         (querySnapshot) => {
           const usersList = [];
-//          let newWeightsArray = [];
+//          let newWeightsArray =
           let weightArray = [];
           let timestampArray = [];
           let previousWeight = null;
@@ -68,7 +42,7 @@ export default function Home({route, navigation}) {
             usersList.push({ id: doc.id, ...doc.data() });
 
             // newWeightsArray.push({ weight: doc.data().myInteger, timestamp: doc.data().timestamp });
-            weightArray.push(doc.data().myInteger);
+            weightArray.push(doc.data().myInteger - cylinderWeight);
             timestampArray.push(doc.data().timestamp.seconds);
 
             if (previousWeight !== null && previousWeight < doc.data().myInteger - 10) {
@@ -78,14 +52,16 @@ export default function Home({route, navigation}) {
               timestampArray.push(doc.data().timestamp.seconds);
             }
 
-            previousWeight = doc.data().myInteger;
-
+            previousWeight = doc.data().myInteger - cylinderWeight;
           });
+          
+
+
           setUsers(usersList);
           console.log('Got Users collection result:', usersList);
-          // console.log('Got Users collection result:', newWeightsArray);
-          setWeight(usersList[0].myInteger);
-          console.log(weight);
+          console.log(weightArray.length);
+          setPercentageWeight(Math.round((previousWeight - cylinderWeight)/(40 - cylinderWeight)*100));
+          console.log("weight", (previousWeight - cylinderWeight));
           console.log(weightArray);
           console.log(timestampArray);
 
@@ -96,7 +72,7 @@ export default function Home({route, navigation}) {
           const yValues = timestampArray;
 
           const regressionLine = ss.linearRegressionLine(ss.linearRegression(xValues.map((x, i) => [x, yValues[i]])));
-
+          setEndDate();
           console.log(new Date(Math.round(regressionLine(0)*1000)));
 
         },
@@ -109,12 +85,11 @@ export default function Home({route, navigation}) {
       return () => unsubscribe();
     }, []);
 
-    marginTop.value = withSpring(-(weight / 100 * 300));
+    marginTop.value = withSpring((0));
 
-    const { username, cylinderWeight } = route.params;
+      heightTop.value = withSpring(((1-percentageWeight/100)*180));
+      heightBottom.value = withSpring((percentageWeight/100)*180);
 
-    // username = "John Doe";
-    // cylinderWeight = 12.5;
 
       return (
         <View style={styles.container}> 
@@ -123,8 +98,6 @@ export default function Home({route, navigation}) {
                 <Text style={styles.name}>Hi {username}</Text>
                 <Text style={styles.nameDescription}>Litro Gas Cylinder, {cylinderWeight}kg</Text>
             </View>
-
-
             <View style={styles.middle}>
               <MaskedView
                 style={styles.maskedView}
@@ -135,29 +108,30 @@ export default function Home({route, navigation}) {
               
                 <Animated.View
                   style={{
-                      flex: 1,
-                    height: 200,
+                    height: heightTop,
                     backgroundColor: '#FAFAFA',
-                    marginTop
                   }}
                 />
                 <Animated.View
                   style={{
-                      flex: 1,
-                    height: 200,
+                    height: heightBottom,               
                     backgroundColor: '#5C94F7',
                   
                   }}
                 />
               </MaskedView>
-              <Text style={styles.weight}>{Math.round(weight)}%</Text>
+              <Text style={styles.weight}>{percentageWeight}%</Text>
             </View>
-            <FlatList style={styles.flatlist}>
-              <View style={styles.box}></View>
-              <View style={styles.box}></View>
-              <View style={styles.box}></View>
-              <View style={styles.box}></View>
-            </FlatList>
+            <View style={styles.bottom}>
+              <View style={styles.bottomTopBox}>
+                <Text>Top Box</Text>
+                <Text>hi</Text>
+              </View>
+              <View style={styles.bottomDownBox}>
+                <View style={styles.leftBox}></View>
+                <View style={styles.rightBox}></View>
+              </View>
+            </View>
    
  
 
@@ -196,7 +170,6 @@ const styles = StyleSheet.create({
         marginTop: 40,
         alignItems: 'center',
         justifyContent: 'center',
-        //backgroundColor: 'plum',
         shadowColor: 'black',
         shadowOffset: {
           width: 0,
@@ -207,7 +180,6 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     maskedView: {
-        //display: 'flex',
         height: 180,
         width: 300,
       },
@@ -215,9 +187,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         paddingTop: 20,  
         fontFamily: "Poppins-Semibold",
-        fontSize: 25,
+        fontSize: 26,
         fontWeight: 600,
         color: "#F7F7F7",
+        textShadowColor: '#1914FF', // Stroke color
+        textShadowOffset: { width: 0, height: 0 }, // Stroke offset
+        textShadowRadius: 2, // Stroke radius
         
       },
       maskContainer: {
@@ -226,17 +201,59 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'transparent',
       },
-      // flatlist: {
-      //   display: 'flex',
-      //   flexDirection: 'row',
-      //   alignItems: 'flex-start',
-      //   //justifyContent: 'space-between',
-      //   gap: 18,
-      //   flexWrap: 'wrap',
-      // },
-      // box: {
-      //   backgroundColor: "white",
-      //   width: 50,
-      //   height: 50,
-      // }
-})
+      bottom: {
+        flex: 1,
+        alignItems: 'center',
+        marginTop: 30,
+        // justifyContent: 'center',
+      },
+      bottomTopBox: {
+        width: 300,
+        height: 90,
+        backgroundColor: '#F7F7F7',
+        borderRadius: 20,
+        padding: 15,
+        shadowColor: 'black',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.5,
+        elevation: 2,
+      },
+      bottomDownBox: {
+        width: 300,
+        marginTop: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      },
+      leftBox: {
+        width: 145,
+        height: 90,
+        backgroundColor: '#F7F7F7',
+        borderRadius: 20,
+        shadowColor: 'black',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.5,
+        elevation: 2,
+      },
+      rightBox: {
+        width: 145,
+        height: 90,
+        backgroundColor: '#F7F7F7',
+        borderRadius: 20,
+        shadowColor: 'black',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.5,
+        elevation: 2,
+      },
+  })
