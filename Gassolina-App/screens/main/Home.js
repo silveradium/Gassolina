@@ -34,7 +34,6 @@ export default function Home({route, navigation}) {
       const unsubscribe = firestore().collection('7nNXGvfQT4bHKC3iF8htlkjSJ6W2').orderBy("timestamp", "asc").onSnapshot(
         (querySnapshot) => {
           const usersList = [];
-//          let newWeightsArray =
           let weightArray = [];
           let timestampArray = [];
           let previousWeight = null;
@@ -291,7 +290,7 @@ const styles = StyleSheet.create({
         color: "#4E4B4F",
         marginTop: 5,
         marginLeft: 5,
-        fontFamily: "MontserratAlternates-SemiBold",
+        fontFamily: "MontserratAlternates-bold",
         fontSize: 24,
         lineHeight: 'normal',
       },

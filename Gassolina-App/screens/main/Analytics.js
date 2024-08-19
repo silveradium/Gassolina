@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 function Daily() {
     const barData = [
-        {value: 250, label: 'M'},
+        {value: 500, label: 'M'},
         {value: 500, label: 'T', frontColor: '#177AD5'},
         {value: 745, label: 'W', frontColor: '#177AD5'},
         {value: 320, label: 'T'},
@@ -16,6 +16,7 @@ function Daily() {
         {value: 256, label: 'S'},
         {value: 300, label: 'S'},
     ];
+    const [array, setArray] = useState([]);
 
     const [percentageWeight, setPercentageWeight] = useState(0);  
     const [daysRemaining, setDaysRemaining] = useState(null);
@@ -42,9 +43,17 @@ function Daily() {
           setUsers(usersList);
           console.log('Got Users collection result:', usersList);
           // console.log(weightArray.length);
-          console.log(newWeightsArray);
-          // console.log(weightArray);
-          // console.log(timestampArray);
+          console.log(newWeightsArray.length);
+//
+
+        //   const timer = setTimeout(() => {
+        //     setArray(newWeightsArray);
+        //     console.log(new Date(array[array.length-1].timestamp).getDate());
+        // }, 1000);
+//
+          // function to put the data in the days
+
+          // console.log(new Date(newWeightsArray[newWeightsArray.length].timestamp).getDate());
           
     
             // Cleanup the timer if the component unmounts
