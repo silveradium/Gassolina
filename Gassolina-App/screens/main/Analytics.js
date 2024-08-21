@@ -42,14 +42,13 @@ function Daily() {
 
           setUsers(usersList);
           console.log('Got Users collection result:', usersList);
-          // console.log(weightArray.length);
           console.log(newWeightsArray.length);
 //
 
-        //   const timer = setTimeout(() => {
-        //     setArray(newWeightsArray);
-        //     console.log(new Date(array[array.length-1].timestamp).getDate());
-        // }, 1000);
+          const timer = setTimeout(() => {
+            setArray(newWeightsArray);
+            console.log(new Date(array[array.length-1].timestamp).getDay());
+        }, 1000);
 //
           // function to put the data in the days
 
@@ -68,7 +67,7 @@ function Daily() {
       // Clean up the listener when the component unmounts
       return () => unsubscribe();
     }, []);
-
+//
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "white", borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
