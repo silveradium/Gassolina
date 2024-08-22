@@ -20,7 +20,7 @@ export default function SignUp({ navigation }) {
             const user = userCredential.user;
             console.log('Registered with:', user.email);
             console.log('Registered with:', user.uid);
-            setUserInfo([email, passwor, user.uid]);
+            setUserInfo([email, password, user.uid]);
 
         })
         .catch(error => {
@@ -35,18 +35,15 @@ export default function SignUp({ navigation }) {
         Keyboard.dismiss();
         setEmail('');
         setPassword('');
+        console.log("userinfo", userInfo);
+        console.log("email", email);
+        console.log("password", password);
         navigation.navigate('Wifi', {
-            itemId: userInfo,
-            otherParam: 'anything you want here',
+            username: email,
+            password: password,
           });
     }
-    const handlePrint = () => {
-      console.log(userInfo);  //needs to be removed
-      navigation.navigate('Wifi', {
-          itemId: userInfo,
-          otherParam: 'anything you want here',
-        });
-  }
+
   return ( <KeyboardAvoidingView style={styles.container} behavior="height">
     <Image source={require('../../assets/background.png')} style={ styles.background } />
     <Text style={styles.steps}>Step 1/5</Text>
@@ -66,7 +63,6 @@ export default function SignUp({ navigation }) {
         <GetStartedButton text="Sign-up" onPress={handleSignUp} width={210}/>
 
     </View>
-    <Button title="Next" onPress={handlePrint} /> 
   </KeyboardAvoidingView> );
   
 }

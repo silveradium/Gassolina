@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         zIndex: -1,
     },
     top: {
-        marginTop: 50,
+        marginTop: 40,
         marginLeft: 20,
     },
     name: {
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     maskedView: {
-        height: 180,
+        height: 155,
         width: 300,
       },
       weight: {
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
       },
       bottomTopBox: {
-        width: 320,
+        width: 300,
         height: 90,
         backgroundColor: '#F7F7F7',
         borderRadius: 20,
@@ -239,13 +239,13 @@ const styles = StyleSheet.create({
         elevation: 2,
       },
       bottomDownBox: {
-        width: 320,
+        width: 300,
         marginTop: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
       },
       leftBox: {
-        width: 155,
+        width: 145,
         height: 90,
         padding: 10,
         backgroundColor: '#F7F7F7',
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
         elevation: 2,
       },
       rightBox: {
-        width: 155,
+        width: 145,
         height: 90,
         padding: 10,
         backgroundColor: '#F7F7F7',
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
       boxTitle: {
         color: '#4E4B4F',
         fontFamily: "Poppins-Regular",
-        fontSize: 18,
+        fontSize: 17,
         lineHeight: 'normal',
       },
       boxTitleBottom: {

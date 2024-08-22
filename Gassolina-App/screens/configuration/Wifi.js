@@ -73,7 +73,9 @@ const onSubmitPassword = () => {
 
 export default function Wifi({ route, navigation }) {
 
-  const { itemId, otherParam } = route.params;
+  const { password, username } = route.params;
+   // Log route params to debug
+   console.log(route.params);
 
   const [emails, setEmails] = useState(['']);
   const [expandedId, setExpandedId] = useState(null);
@@ -89,16 +91,21 @@ export default function Wifi({ route, navigation }) {
     );
   };
 
-  const addEmail = (email) => {
-    if (!email) return;
-    setEmails([...emails, email]);
-    setEmail('');
-    console.log(itemId, otherParam);
+  // const addEmail = (email) => {
+  //   if (!email) return;
+  //   setEmails([...emails, email]);
+  //   setEmail('');
+  //   console.log(itemId, otherParam);
+  // }
+  const navigateToBluetooth = () => {
+    navigation.navigate('Bluetooth', {
+            username: username,
+            password: password,
+          });
   }
 
-
   const displayWifi = () => {
-
+    console.log(username, password);
   }
 
   const ItemSeparator = () => {
@@ -116,7 +123,7 @@ export default function Wifi({ route, navigation }) {
         <TouchableOpacity style={styles.searchbutton} onPress={displayWifi}>
             <Text style={styles.search}>Search</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.searchbutton} onPress={() => navigation.navigate('Bluetooth')}>
+        <TouchableOpacity style={styles.searchbutton} onPress={navigateToBluetooth}>
             <Text style={styles.search}>Next</Text>
         </TouchableOpacity>
         <Text style={styles.searchdes}>Please turn on your Wifi.....</Text>

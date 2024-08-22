@@ -5,11 +5,15 @@ import { atob, btoa } from "react-native-quick-base64";
 
 const bleManager = new BleManager();
 
-export default function Bluetooth( {routes, navigation}) {
+export default function Bluetooth( {route, navigation}) {
+
+    console.log(route.params);
 
     const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
     const USER_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
+    const ssidCharacteriscit = "7e05e450-b517-403c-8a04-376285ac631d";
+    const passCharacteriscit = "3de7b790-66bf-4a80-80ae-5970ead46097";
 
     const [deviceID, setDeviceID] = useState(null);
     const [connectionStatus, setConnectionStatus] = useState("Searching...");
@@ -31,18 +35,26 @@ export default function Bluetooth( {routes, navigation}) {
             setConnectionStatus("Error searching for devices");
             return;
         }
-        if(device && !tempDevices.some(de => de.id === device.id)){
+        if (device && device.name !== null && !tempDevices.some(de => de.id === device.id)) {
           tempDevices.push(device);
-        }
+      }
         });
-        navigation.navigate('Profile')
+        // navigation.navigate('Profile')
 
         setTimeout(() => {
           bleManager.stopDeviceScan();
           setDiscoveredDevices(tempDevices);// them have to let user sleect the device onece selected rewoke the connectToDevice function
+          console.log("Discovered devices:", tempDevices);
         }, 5000);
       };
 
+    const consoleArrays = () => {
+      console.log("sarray", services_arr);
+      console.log("chararray", characteristics_arr);
+      console.log("passwordCh", pass_characteristic);
+      console.log("userCh", user_characteristic);
+      console.log("networkCh", network_characteristic);
+    };
 
     const connectToGassolina = (device) => {
       bleManager.connectToDevice(device.id)
@@ -57,11 +69,11 @@ export default function Bluetooth( {routes, navigation}) {
       })
       .then((services) => {
         services.forEach((service) => {
-          console.log(service.uuid);
+          console.log("service uid", service.uuid);
           services_arr.push(service);
           service.characteristics().then((characteristics) => {
             characteristics.forEach((characteristic) => {
-              console.log(characteristic.uuid);
+              console.log("charcteristic", characteristic.uuid);
               characteristics_arr.push(characteristic);
               characteristic.readDescriptor().then((descriptor) => {
                 console.log(descriptor.value);
@@ -102,7 +114,17 @@ export default function Bluetooth( {routes, navigation}) {
       });
     }
 
-
+    const sendUserInfoToGassolina = () => {
+      const encodedData = btoa("heyyyyy@");// Base64 encode the data if needed
+      bleManager.writeCharacteristicWithResponseForDevice("2C38AE11-697D-F0C6-32CD-F061407AD0F1", "68544538-7148-4fc4-b555-a029b320b33e", "7e05e450-b517-403c-8a04-376285ac631d", encodedData)
+      .then(() => {
+        console.log("Data written to characteristic successfully");
+      })
+      .catch((error) => {
+        console.log("Error writing data to characteristic:", error);
+      });
+      
+    };
       // const sendDataToCharacteristic = (characteristic, data) => {
         
       //   const encodedData = btoa(data);// Base64 encode the data if needed
@@ -122,9 +144,10 @@ export default function Bluetooth( {routes, navigation}) {
       
       <Text style={styles.steps}>Step 1/5</Text>
       <View style={styles.top}>
-        <Text style={styles.heading}>Pair with Gassolina</Text>
-        <Text style={styles.description}>Please pair with Gassolina for a short period while we transfer the data</Text>
-
+        {/* <Text style={styles.heading}>Pair with Gassolina</Text> */}
+        {/* <Text style={styles.description}>Please pair with Gassolina for a short period while we transfer the data</Text> */}
+        <Button title="sendFire" onPress={sendUserInfoToGassolina} />
+        <Button title="connect" onPress={consoleArrays} />
         <Text style={styles.searchdes}>Please turn on Gassolina’s BT by pressing the Bluetooth button</Text>
       </View>
       <View style={styles.middle}>
