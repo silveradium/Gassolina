@@ -10,10 +10,6 @@ export default function StartUp({ navigation}) {
     navigation.navigate('SignUp');
   }
 
-  const skipToBluetooth = () => {
-    navigation.navigate('Bluetooth');
-  }
-
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
@@ -36,25 +32,6 @@ export default function StartUp({ navigation}) {
     checkLoginStatus();
   }, []);
 
-  const logAsyncStorageData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@isLogged');
-      if (value !== null) {
-        console.log("Stored value:", value);
-      } else {
-        console.log("No value found in AsyncStorage for the key '@storage_key'");
-      }
-    } catch (e) {
-      console.log("Error reading value from AsyncStorage:", e);
-    }
-  };
-
-
-
-  const showData = () => {
-    logAsyncStorageData();
-  }
-
     return (
       <View style={styles.container}> 
         <View style={styles.heading}>
@@ -73,14 +50,11 @@ export default function StartUp({ navigation}) {
             <Text style={styles.logoText}>Productions</Text>
           </View>
         </View>
-        {/* <Button title="Sign Up" onPress={pressHandler} /> */}
         <TouchableOpacity style={styles.button} onPress={pressHandler}>
             <View>
                 <Text style={styles.getstarted}>Get Started</Text>
             </View>
         </TouchableOpacity>
-        <Button title="Show Data" onPress={showData} />
-        <Button title="Bluetooth" onPress={skipToBluetooth} />
       </View>
     );
   }

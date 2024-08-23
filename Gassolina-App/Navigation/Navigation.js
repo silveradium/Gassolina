@@ -19,7 +19,7 @@ export default function Navigation() {
         <Stack.Screen name="Wifi" component={Wifi} options={{headerShown: false}}/>
         <Stack.Screen name="Bluetooth" component={Bluetooth} options={{headerShown: false}}/>
         <Stack.Screen name="Profile" component={Profile} options={{headerShown: false}}/>
-        <Stack.Screen name="Main" component={Main} options={{headerShown: false}}/>
+        <Stack.Screen name="Main" component={Main} options={{headerShown: false, gestureEnabled: false }}/>
     </Stack.Navigator>
   );
 }

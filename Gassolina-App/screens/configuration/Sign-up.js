@@ -85,10 +85,13 @@ export default function SignUp({ navigation }) {
         onChangeText = {(text) => setPassword(text)}
         secureTextEntry
         />
-        <GetStartedButton text="Sign-up" onPress={handleSignUp} width={210}/>
+        <GetStartedButton text="Sign-up" onPress={() => {
+    handleSignUp();
+    saveData();
+  }}  width={210}/>
 
     </View>
-    <Button title="Save Data" onPress={saveData} />
+    {/* <Button title="Save Data" onPress={saveData} /> */}
   </KeyboardAvoidingView> );
   
 }
