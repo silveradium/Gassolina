@@ -71,11 +71,9 @@ const onSubmitPassword = () => {
   )
 }
 
-export default function Wifi({ route, navigation }) {
+export default function Wifi({ navigation }) {
 
-  const { password, username } = route.params;
    // Log route params to debug
-   console.log(route.params);
 
   const [emails, setEmails] = useState(['']);
   const [expandedId, setExpandedId] = useState(null);

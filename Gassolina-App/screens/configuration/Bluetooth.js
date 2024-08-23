@@ -39,7 +39,7 @@ export default function Bluetooth( {route, navigation}) {
           tempDevices.push(device);
       }
         });
-        // navigation.navigate('Profile')
+        navigation.navigate('Profile')
 
         setTimeout(() => {
           bleManager.stopDeviceScan();
@@ -123,8 +123,29 @@ export default function Bluetooth( {route, navigation}) {
       .catch((error) => {
         console.log("Error writing data to characteristic:", error);
       });
-      
+
+    
     };
+
+    const sendScan = () => {
+      const encodedData = btoa("5");// Base64 encode the data if needed
+      bleManager.writeCharacteristicWithResponseForDevice("2C38AE11-697D-F0C6-32CD-F061407AD0F1", "68544538-7148-4fc4-b555-a029b320b33e", "3de7b790-66bf-4a80-80ae-5970e6d46097", encodedData)
+      .then(() => {
+        console.log("Data written to characteristic successfully");
+      })
+      .catch((error) => {
+        console.log("Error writing data to characteristic:", error);
+      });
+
+
+    }
+
+    const readData = () => {
+      bleManager.readCharacteristicForDevice("2C38AE11-697D-F0C6-32CD-F061407AD0F1", "68544538-7148-4fc4-b555-a029b320b33e", "449d19d2-ac08-43ac-921d-4347f5ec86c6")
+      .then((data) => {
+        console.log("Data read from characteristic:", data);
+      })
+    }
       // const sendDataToCharacteristic = (characteristic, data) => {
         
       //   const encodedData = btoa(data);// Base64 encode the data if needed
@@ -146,6 +167,8 @@ export default function Bluetooth( {route, navigation}) {
       <View style={styles.top}>
         {/* <Text style={styles.heading}>Pair with Gassolina</Text> */}
         {/* <Text style={styles.description}>Please pair with Gassolina for a short period while we transfer the data</Text> */}
+        <Button title="sendScan" onPress={sendScan} />
+        <Button title="readData" onPress={readData} />
         <Button title="sendFire" onPress={sendUserInfoToGassolina} />
         <Button title="connect" onPress={consoleArrays} />
         <Text style={styles.searchdes}>Please turn on Gassolina’s BT by pressing the Bluetooth button</Text>

@@ -10,9 +10,10 @@ import GetStartedButton from '../../assets/components/MyButton';
 export default function SignUp({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const [userInfo, setUserInfo] = useState({uid: "", email: "", password: ""});
     const [userInfo, setUserInfo] = useState([]);
 
+
+    // when signup is pressed
     const handleSignUp = () => {
         auth()
         .createUserWithEmailAndPassword(email, password)
@@ -38,7 +39,7 @@ export default function SignUp({ navigation }) {
         console.log("userinfo", userInfo);
         console.log("email", email);
         console.log("password", password);
-        navigation.navigate('Wifi', {
+        navigation.navigate('BluetoothProper', {
             username: email,
             password: password,
           });
