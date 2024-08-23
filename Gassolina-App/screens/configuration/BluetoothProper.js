@@ -154,10 +154,15 @@ export default function BluetoothProper( {route, navigation}) {
 
     }
 
+    const next = () => {
+        navigation.navigate('Wifi');
+    }
+
     return (
       <View style={styles.container}>
         <Image source={require('../../assets/background.png')} style={ styles.background } />
         <Text style={styles.steps}>Step 1/5</Text>
+        <Button title="next" onPress={next} />
         <View style={styles.top}>
             <Text style={styles.heading}>Pair with Gassolina</Text>
             <Text style={styles.description}>Please pair with Gassolina for a short period while we transfer the data</Text>

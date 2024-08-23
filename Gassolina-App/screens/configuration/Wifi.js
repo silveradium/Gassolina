@@ -96,10 +96,7 @@ export default function Wifi({ navigation }) {
   //   console.log(itemId, otherParam);
   // }
   const navigateToBluetooth = () => {
-    navigation.navigate('Bluetooth', {
-            username: username,
-            password: password,
-          });
+    navigation.navigate('Profile');
   }
 
   const displayWifi = () => {

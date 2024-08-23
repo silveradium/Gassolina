@@ -1,12 +1,58 @@
 import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
 // import GetStartedButton from '../components/Get-started-button';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';  
 
 export default function StartUp({ navigation}) {
 
  
   const pressHandler = () => {
     navigation.navigate('SignUp');
+  }
+
+  const skipToBluetooth = () => {
+    navigation.navigate('Bluetooth');
+  }
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const keys = ['@isLogged', '@username', '@cylinderWeight'];
+        const result = await AsyncStorage.multiGet(keys);
+        const values = Object.fromEntries(result);
+
+        if (values['@isLogged'] === "true") {
+          console.log("User is logged in");
+          navigation.navigate('Main', {
+            username: values['@username'] || 'Unknown',
+            cylinderWeight: parseFloat(values['@cylinderWeight']) || 0.0,
+          });
+        }
+      } catch (e) {
+        console.log("Error reading value from AsyncStorage:", e);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
+
+  const logAsyncStorageData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@isLogged');
+      if (value !== null) {
+        console.log("Stored value:", value);
+      } else {
+        console.log("No value found in AsyncStorage for the key '@storage_key'");
+      }
+    } catch (e) {
+      console.log("Error reading value from AsyncStorage:", e);
+    }
+  };
+
+
+
+  const showData = () => {
+    logAsyncStorageData();
   }
 
     return (
@@ -33,7 +79,8 @@ export default function StartUp({ navigation}) {
                 <Text style={styles.getstarted}>Get Started</Text>
             </View>
         </TouchableOpacity>
-        {/* <GetStartedButton text="Get Started" /> */}
+        <Button title="Show Data" onPress={showData} />
+        <Button title="Bluetooth" onPress={skipToBluetooth} />
       </View>
     );
   }

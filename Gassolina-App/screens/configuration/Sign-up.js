@@ -3,6 +3,7 @@ import auth from '@react-native-firebase/auth';
 import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Keyboard, Button } from 'react-native';
 import { useState } from 'react';
 import GetStartedButton from '../../assets/components/MyButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -45,6 +46,29 @@ export default function SignUp({ navigation }) {
           });
     }
 
+    const saveData = async () => {
+      try {
+        await AsyncStorage.setItem('@isLogged', "true" );
+        logAsyncStorageData();
+      } catch (e) {
+        // saving error
+        console.log(e);
+      }
+    };
+
+    const logAsyncStorageData = async () => {
+      try {
+        const value = await AsyncStorage.getItem('@isLogged');
+        if (value !== null) {
+          console.log("Stored value:", value);
+        } else {
+          console.log("No value found in AsyncStorage for the key '@storage_key'");
+        }
+      } catch (e) {
+        console.log("Error reading value from AsyncStorage:", e);
+      }
+    };
+
   return ( <KeyboardAvoidingView style={styles.container} behavior="height">
     <Image source={require('../../assets/background.png')} style={ styles.background } />
     <Text style={styles.steps}>Step 1/5</Text>
@@ -64,6 +88,7 @@ export default function SignUp({ navigation }) {
         <GetStartedButton text="Sign-up" onPress={handleSignUp} width={210}/>
 
     </View>
+    <Button title="Save Data" onPress={saveData} />
   </KeyboardAvoidingView> );
   
 }
@@ -107,16 +132,7 @@ const styles = StyleSheet.create({
         marginBottom: 50,
         fontFamily: 'Poppins-SemiBold',
     },
-    // button: {
-    //     marginTop: 25,
-    //     marginBottom: 40,
-    //     width: '80%',
-    //     height: 45,
-    //     borderRadius: '14px',
-    //     backgroundColor: '#5C94F7',
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //   },
+
       input: {
         width: '80%',
         height: 45,

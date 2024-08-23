@@ -1,10 +1,23 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, Image, Button, FlatList, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 export default function Settings({ navigation }) {
+
+  const logout = async () => {
+    try {
+      await AsyncStorage.setItem('@isLogged', "false" );
+      navigation.pop(7);
+    } catch (e) {
+      // saving error
+      console.log(e);
+    }
+  };
+
+
   return (
     <View style={styles.container}> 
         <Image source={require('../../assets/background.png')} style={ styles.background } />
@@ -14,71 +27,60 @@ export default function Settings({ navigation }) {
               <View style={styles.heading}>
                 <Text style={styles.general}>General</Text>
               </View>
-              <TouchableOpacity style={styles.item}>
-
-                <Image
+              <View style={styles.item}>
+                <View style={styles.title}>
+                  <Text style={styles.itemText}>Account</Text>
+                  <Image
                   source={require('../../assets/icons/settings/profile.png')}
                   resizeMode="contain"
                   style={{
-                    width: 25,
+                    width: 22,
                     height: 29,
                     tintColor: '#4E4B4F',
                   }}
                 />
-                <Text style={styles.itemText}>Account</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.item}>
-                <Image
-                    source={require('../../assets/icons/settings/pencil.png')}
+                
+                </View>
+              </View>
+              <TouchableOpacity style={styles.field} onPress={logout}>
+                
+                    <Image
+                    source={require('../../assets/icons/settings/logout.png')}
                     resizeMode="contain"
                     style={{
-                      width: 25,
+                      width: 16,
                       height: 29,
                       tintColor: '#4E4B4F',
                     }}
-                />
-                <Text style={styles.itemText}>Change cylinder type</Text>
-                <View style={styles.arrow}></View>
+                  />
+                  <Text style={styles.descriptionText}>Logout</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.item}>
+              <View style={styles.item}>
+                <View style={styles.title}>
+                  <Text style={styles.itemText}>Notifications</Text>
+                  <Image
+                      source={require('../../assets/icons/settings/notifications.png')}
+                      resizeMode="contain"
+                      style={{
+                        width: 22,
+                        height: 29,
+                        tintColor: '#4E4B4F',
+                      }}
+                  />
+                </View>
+              </View>
+              <TouchableOpacity style={styles.field}>
                 <Image
-                    source={require('../../assets/icons/settings/add.png')}
-                    resizeMode="contain"
-                    style={{
-                      width: 25,
-                      height: 29,
-                      tintColor: '#4E4B4F',
-                    }}
-                />
-                <Text style={styles.itemText}>Add new cylinder</Text>
-                <View style={styles.arrow}></View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.item}>
-                <Image
-                    source={require('../../assets/icons/settings/wifi.png')}
-                    resizeMode="contain"
-                    style={{
-                      width: 25,
-                      height: 29,
-                      tintColor: '#4E4B4F',
-                    }}
-                />
-                <Text style={styles.itemText}>Change WiFi</Text>
-                <View style={styles.arrow}></View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.item}>
-                <Image
-                    source={require('../../assets/icons/settings/notifications.png')}
-                    resizeMode="contain"
-                    style={{
-                      width: 25,
-                      height: 29,
-                      tintColor: '#4E4B4F',
-                    }}
-                />
-                <Text style={styles.itemText}>Notifications</Text>
-                <View style={styles.arrow}></View>
-              </TouchableOpacity>
+                source={require('../../assets/icons/settings/notifications_on.png')}
+                resizeMode="contain"
+                style={{
+                  width: 16,
+                  height: 29,
+                  tintColor: '#4E4B4F',
+                }}
+              />
+              <Text style={styles.descriptionText}>Turn on notifications</Text>
+          </TouchableOpacity>
             </View>
         </View>
     
@@ -144,17 +146,36 @@ const styles = StyleSheet.create({
   },
   item: {
       width: '85%',
-      padding: 10,
+      padding: 5,
       paddingLeft: -5,
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: 'column',
+      justifyContent: 'center',
       borderBottomWidth: 1,
       borderBottomColor: '#D8D8D8',
   },
+  title: {
+      flexDirection: 'row',
+      alignItems: 'center',
+  },  
   itemText: {
-      paddingLeft: 14,
+      paddingLeft: 3,
+      paddingRight: 5,
       color: '#4E4B4F',
-      fontFamily: "Popins-Medium",
-      fontSize: 15,
+      fontFamily: "Poppins-semiBold",
+      fontSize: 14,
+  },
+  field: {
+      width: '100%',
+      height: 40,
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 10,
+      marginLeft: 70,
+  },
+  descriptionText: {
+      color: '#4E4B4F',
+      fontFamily: "Poppins-Regular",
+      fontSize: 14,
+      marginLeft: 10,
   },
 });

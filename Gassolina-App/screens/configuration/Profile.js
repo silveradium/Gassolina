@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image, Button, TouchableOpacity, TextInput } from 'react-native';
 // import GetStartedButton from '../components/Get-started-button';
 import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function StartUp({ navigation}) {
@@ -9,15 +10,20 @@ export default function StartUp({ navigation}) {
   const [cylinderWeight, setCylinderWeight] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
  
-  const pressHandler = () => {
-    navigation.navigate('Main',
-      {
+  const pressHandler = async () => {
+    try {
+      await AsyncStorage.multiSet([
+        ['@username', username],
+        ['@cylinderWeight', cylinderWeight.toString()],
+      ]);
+      navigation.navigate('Main', {
         username: username,
         cylinderWeight: cylinderWeight,
-      }
-    );
-    
-  }
+      });
+    } catch (e) {
+      console.log("Error saving data to AsyncStorage:", e);
+    }
+  };
   
   const handlePress = (option) => {
     setSelectedOption(option);
