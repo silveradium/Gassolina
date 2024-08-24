@@ -28,6 +28,7 @@ export default function BluetoothProper( {route, navigation}) {
     let user_characteristic = "7e05e450-b517-403c-8a04-376285ac631d"
     let network_characteristic = "449d19d2-ac08-43ac-921d-4347f5ec86c6"
     let scan_characteristic = "3de7b790-66bf-4a80-80ae-5970e6d46097"
+    let deviceId = "4F93D44E-0796-37A0-09D5-62371E492927"
 
     const deviceRef = useRef(null);
 
@@ -39,7 +40,7 @@ export default function BluetoothProper( {route, navigation}) {
             setConnectionStatus("Error searching for devices");
             return;
         }
-        if (device && device.name === "Arduino") {
+        if (device && device.localName === "Gasolina101") {
             setConnectionStatus("Searching.....");
             setTimeout(() => {
                   bleManager.stopDeviceScan();
@@ -111,6 +112,18 @@ export default function BluetoothProper( {route, navigation}) {
       };
     
 
+      const sendScanToGassolina = () => {
+        const encodedData = btoa("5");// Base64 encode the data if needed
+        bleManager.writeCharacteristicWithResponseForDevice(deviceId, "68544538-7148-4fc4-b555-a029b320b33e", scan_characteristic, encodedData)
+        .then(() => {
+          console.log("Data written to characteristic successfully");
+        })
+        .catch((error) => {
+          console.log("Error writing data to characteristic:", error);
+        });
+      };
+
+          
     const writeDataToCharacteristic = (characteristic, data) => {
       bleManager.writeCharacteristicWithResponseForDevice(deviceRef.current.id, characteristic.serviceUUID, characteristic.uuid, data)
       .then(() => {
@@ -123,7 +136,7 @@ export default function BluetoothProper( {route, navigation}) {
 
     const sendSsidToGassolina = (data) => {
       const encodedData = btoa(data + "@fire");// Base64 encode the data if needed
-      bleManager.writeCharacteristicWithResponseForDevice("2C38AE11-697D-F0C6-32CD-F061407AD0F1", "68544538-7148-4fc4-b555-a029b320b33e", user_characteristic, encodedData)
+      bleManager.writeCharacteristicWithResponseForDevice(deviceId, "68544538-7148-4fc4-b555-a029b320b33e", user_characteristic, encodedData)
       .then(() => {
         console.log("Data written to characteristic successfully");
       })
@@ -134,7 +147,7 @@ export default function BluetoothProper( {route, navigation}) {
 
     const sendPassToGassolina = (data) => {
         const encodedData = btoa(data + "@fire");// Base64 encode the data if needed
-        bleManager.writeCharacteristicWithResponseForDevice("2C38AE11-697D-F0C6-32CD-F061407AD0F1", "68544538-7148-4fc4-b555-a029b320b33e", pass_characteristic, encodedData)
+        bleManager.writeCharacteristicWithResponseForDevice(deviceId, "68544538-7148-4fc4-b555-a029b320b33e", pass_characteristic, encodedData)
         .then(() => {
           console.log("Data written to characteristic successfully");
         })
@@ -144,11 +157,20 @@ export default function BluetoothProper( {route, navigation}) {
       };
 
 
+  
     const readData = () => {
-      bleManager.readCharacteristicForDevice("2C38AE11-697D-F0C6-32CD-F061407AD0F1", "68544538-7148-4fc4-b555-a029b320b33e", "449d19d2-ac08-43ac-921d-4347f5ec86c6")
+      bleManager.readCharacteristicForDevice(deviceId, "68544538-7148-4fc4-b555-a029b320b33e", network_characteristic)
       .then((data) => {
         console.log("Data read from characteristic:", data);
       })
+    }
+  
+    const displayWifi = () => {
+      sendScanToGassolina();
+      setTimeout(() => {
+          readData();
+        }, 4000);
+      // console.log(username, password);
     }
     const yo = () => {
 
@@ -163,6 +185,7 @@ export default function BluetoothProper( {route, navigation}) {
         <Image source={require('../../assets/background.png')} style={ styles.background } />
         <Text style={styles.steps}>Step 1/5</Text>
         <Button title="next" onPress={next} />
+        <Button title="scan" onPress={displayWifi} />
         <View style={styles.top}>
             <Text style={styles.heading}>Pair with Gassolina</Text>
             <Text style={styles.description}>Please pair with Gassolina for a short period while we transfer the data</Text>

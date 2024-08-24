@@ -2,53 +2,44 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Keyboard, Button, ScrollView, FlatList } from 'react-native';
 import { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { BleManager } from "react-native-ble-plx";
+import { atob, btoa } from "react-native-quick-base64";
+import { Buffer } from 'buffer';
 
+const bleManager = new BleManager();
 
-const wifi = [
-  {
-    id: 1,
-    name: 'Wifi 1',
-    password: null
-  },
-  {
-    id: 2,
-    name: 'Wifi 2',
-    password: null
-  },
-  {
-    id: 3,
-    name: 'Wifi 3',
-    password: null
-  },
-  {
-    id: 4,
-    name: 'Wifi 4',
-    password: null
-  },
-  {
-    id: 5,
-    name: 'Wifi 5',
-    password: null
-  },
-  {
-    id: 6,
-    name: 'Wifi 4',
-    password: null
-  },
-  {
-    id: 7,
-    name: 'Wifi 5',
-    password: null
-  },
-]
+let pass_characteristic = "3de7b790-66bf-4a80-80ae-5970ead46097"
+let user_characteristic = "7e05e450-b517-403c-8a04-376285ac631d"
+let network_characteristic = "449d19d2-ac08-43ac-921d-4347f5ec86c6"
+let scan_characteristic = "3de7b790-66bf-4a80-80ae-5970e6d46097"
+let deviceId = "4F93D44E-0796-37A0-09D5-62371E492927"
+let serviceUUID = "68544538-7148-4fc4-b555-a029b320b33e"
 
 
 
 const WifiCard = ({ item, expanded, onPress }) => {
-  const [password, setPassword] = useState('');
+
+
+const [password, setPassword] = useState('');
+
+const sendWifiToGassolina = (ssid, password) => {
+  const encodedWifi = btoa(ssid + "@wifi");// Base64 encode the data if needed
+  const encodedPassword = btoa(password + "@wifi");// Base64 encode the data if needed
+  bleManager.writeCharacteristicWithResponseForDevice(deviceId, "68544538-7148-4fc4-b555-a029b320b33e", user_characteristic, encodedWifi)
+  .then(() => {
+    bleManager.writeCharacteristicWithResponseForDevice(deviceId, "68544538-7148-4fc4-b555-a029b320b33e", pass_characteristic, encodedPassword)
+  })
+  .then(() => {
+    console.log("Data written to characteristic successfully");
+  })
+  .catch((error) => {
+    console.log("Error writing data to characteristic:", error);
+  });
+};
 
 //when password is submitted
 const onSubmitPassword = () => {
+  sendWifiToGassolina(item.name, password); //didnt check this function yet
   Keyboard.dismiss();
   console.log(password);
   setPassword('');
@@ -56,7 +47,7 @@ const onSubmitPassword = () => {
 
 }
   return (
-    <View style={styles.wifiGroup}>
+    <KeyboardAvoidingView style={styles.wifiGroup}>
       <TouchableWithoutFeedback style={styles.displayName} onPress= {onPress}>
         <Image source={require('../../assets/wifi-icon.png')} style={ styles.wifiIconFlatlist } />
         <Text style={styles.wifiNames} >{item.name}</Text>
@@ -67,14 +58,14 @@ const onSubmitPassword = () => {
       onChangeText={(text) => setPassword(text)}
       /><Button title=">" onPress={onSubmitPassword} style={{fontFamily: 'Poppins-Light'}}/></View>)}
       
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
 export default function Wifi({ navigation }) {
 
-   // Log route params to debug
-
+  // Log route params to debug
+  const [wifi, setWifi] = useState([]);
   const [emails, setEmails] = useState(['']);
   const [expandedId, setExpandedId] = useState(null);
 
@@ -93,8 +84,53 @@ export default function Wifi({ navigation }) {
     navigation.navigate('Profile');
   }
 
+  const sendScanToGassolina = () => {
+    const encodedData = btoa("5");// Base64 encode the data if needed
+    bleManager.writeCharacteristicWithResponseForDevice(deviceId, "68544538-7148-4fc4-b555-a029b320b33e", scan_characteristic, encodedData)
+    .then(() => {
+      console.log("Data written to characteristic successfully");
+    })
+    .catch((error) => {
+      console.log("Error writing data to characteristic:", error);
+    });
+  };
+
+
+
+
+  const readCharacteristicValue = async () => {
+    try {
+      // Connect to the device
+      const device = await bleManager.connectToDevice(deviceId);
+      console.log(`Connected to device: ${device.name}`);
+
+      await device.discoverAllServicesAndCharacteristics();
+      console.log('Services and characteristics discovered');
+  
+      // Read the characteristic value
+      const characteristic = await device.readCharacteristicForService(serviceUUID, network_characteristic);
+      const value = Buffer.from(characteristic.value, 'base64').toString('utf-8');
+
+      // Split the string by '>>' and filter out any empty strings
+      const wifiArray = value.split('>>').filter(ssid => ssid && ssid !== '!!');
+      // Create a JSON object
+      const wifi = wifiArray.map((name, index) => ({ id: index+1, name, password: null }));
+      setWifi(wifi);
+
+      console.log(wifi);
+      console.log(`Characteristic value: ${value}`);
+  
+      return value;
+    } catch (error) {
+      console.error('Error reading characteristic value:', error);
+    } 
+  };
+
   const displayWifi = () => {
-    console.log(username, password);
+    // sendScanToGassolina();
+    setTimeout(() => {
+        readCharacteristicValue();
+      }, 4000);
   }
 
   const ItemSeparator = () => {
@@ -102,7 +138,7 @@ export default function Wifi({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <Image source={require('../../assets/background.png')} style={ styles.background } />
       
       <Text style={styles.steps}>Step 1/5</Text>
@@ -123,17 +159,17 @@ export default function Wifi({ navigation }) {
       <Image source={require('../../assets/wifi-icon.png')} style={ styles.wifiIcon } />
       </View>
       <View style={styles.bottom}> 
+        <Text style={styles.connectionDescription}>Tap to select and enter password</Text>
         <FlatList
             style={{width: '90%'}}
             data={wifi}
             keyExtractor={item => item.id}
-            ListHeaderComponent={<Text style={styles.flatlistTitle}>Tap to select and enter password</Text>}
             renderItem={ renderItem }
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={ItemSeparator}
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -250,5 +286,11 @@ middle: {
     fontSize: 15,
     marginTop:5,
     marginBottom: 12
-  }
+  },
+  connectionDescription: {
+    color: '#4E4B4F',
+    fontFamily: "Poppins-Light",
+    fontSize: 15,
+    marginBottom: 10,
+  },
 });

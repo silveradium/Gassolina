@@ -29,6 +29,8 @@ export default function Home({route, navigation}) {
 
     // console.log("first data",user);
 
+   
+
 
     useEffect(() => {
       const unsubscribe = firestore().collection('7nNXGvfQT4bHKC3iF8htlkjSJ6W2').orderBy("timestamp", "asc").onSnapshot(
