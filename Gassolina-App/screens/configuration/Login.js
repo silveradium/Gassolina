@@ -11,40 +11,33 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function SignUp({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userInfo, setUserInfo] = useState([]);
 
-
-    // when signup is pressed
-    const handleSignUp = () => {
+    // when login is pressed
+    const handleLogin = () => {
+        console.log('Attempting to log in with:', email, password); // Add logging here
         auth()
-        .createUserWithEmailAndPassword(email, password)
+        .signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             const user = userCredential.user;
-            console.log('Registered with:', user.email);
-            console.log('Registered with:', user.uid);
-            setUserInfo([email, password, user.uid]);
-
+            console.log('Logged in with:', user.email);
+            console.log('Logged in with:', user.uid);
+            navigation.navigate('BluetoothProper', {
+                username: email,
+                password: password,
+              });
+            saveData();
         })
         .catch(error => {
-          if (error.code === 'auth/email-already-in-use') {
-            console.log('That email address is already in use!');
-          }
-      
-          if (error.code === 'auth/invalid-email') {
-            console.log('That email address is invalid!');
-          }
-        })
+            console.log(error);
+            setTimeout(() => {
+                alert("Invalid credentials. Please try again.");
+            });
+        });
+
         Keyboard.dismiss();
         setEmail('');
         setPassword('');
-        console.log("userinfo", userInfo);
-        console.log("email", email);
-        console.log("password", password);
-        navigation.navigate('BluetoothProper', {
-            username: email,
-            password: password,
-          });
-    }
+    };
 
     const saveData = async () => {
       try {
@@ -73,11 +66,13 @@ export default function SignUp({ navigation }) {
     <Image source={require('../../assets/background.png')} style={ styles.background } />
     <Text style={styles.steps}>Step 1/5</Text>
     <View style={styles.middle}>
-        <Text style={styles.signuo}>Sign Up</Text>
+        <Text style={styles.signuo}>Log In</Text>
+        <Text style={styles.signupAdvice}>Please make sure to input the correct credentials</Text>
         <TextInput style={styles.input} 
         placeholder='Email'
         value = {email}
         onChangeText = {(text) => setEmail(text)}
+        secureTextEntry={false}
         />
         <TextInput style={styles.input} 
         placeholder='Password' 
@@ -85,16 +80,10 @@ export default function SignUp({ navigation }) {
         onChangeText = {(text) => setPassword(text)}
         secureTextEntry
         />
-        <GetStartedButton text="Sign-up" onPress={() => {
-    handleSignUp();
-    saveData();
+        <GetStartedButton text="Log-In" onPress={() => {
+    handleLogin();
   }}  width={210}/>
-  <View style={styles.loginField}>
-    <Text style={styles.loginText}>Already have an account?</Text>
-    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-      <Text style={styles.loginButton}>Login</Text>
-    </TouchableOpacity>
-  </View>
+
 
     </View>
     {/* <Button title="Save Data" onPress={saveData} /> */}
@@ -164,5 +153,13 @@ const styles = StyleSheet.create({
         color: '#5C94F7',
         fontFamily: 'Poppins-SemiBold',
         fontSize: 14,
+      },
+      signupAdvice: {
+        color: '#4E4B4F',
+        fontFamily: 'Poppins-Regular',
+        fontSize: 14,
+        marginBottom: 20,
+        marginTop: -20,
+        width: '80%',
       },
 } );
