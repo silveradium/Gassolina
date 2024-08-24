@@ -8,7 +8,6 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-native-firebase/app": "^20.1.0",
     "@react-native-firebase/auth": "^20.1.0",
     "@react-native-firebase/firestore": "^20.1.0",
@@ -20,6 +19,7 @@
     "expo": "~51.0.13",
     "expo-font": "~12.0.7",
     "expo-linear-gradient": "~13.0.2",
+    "expo-modules-core": "~1.12.23",
     "expo-status-bar": "~1.12.1",
     "pretty-format": "^29.7.0",
     "react": "18.2.0",
