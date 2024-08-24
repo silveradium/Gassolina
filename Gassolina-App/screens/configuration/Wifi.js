@@ -89,12 +89,6 @@ export default function Wifi({ navigation }) {
     );
   };
 
-  // const addEmail = (email) => {
-  //   if (!email) return;
-  //   setEmails([...emails, email]);
-  //   setEmail('');
-  //   console.log(itemId, otherParam);
-  // }
   const navigateToBluetooth = () => {
     navigation.navigate('Profile');
   }

@@ -21,10 +21,10 @@ export default function SignUp({ navigation }) {
             const user = userCredential.user;
             console.log('Logged in with:', user.email);
             console.log('Logged in with:', user.uid);
-            navigation.navigate('BluetoothProper', {
-                username: email,
-                password: password,
-              });
+                    navigation.navigate('BluetoothProper', {
+            username: email,
+            password: password,
+          });
             saveData();
         })
         .catch(error => {
