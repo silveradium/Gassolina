@@ -8,7 +8,7 @@ const bleManager = new BleManager();
 export default function BluetoothProper( {route, navigation}) {
 
     console.log(route.params);
-    const { username, password } = route.params;
+    const { username, password, userUuid } = route.params;////
 
 
     const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
@@ -28,6 +28,7 @@ export default function BluetoothProper( {route, navigation}) {
     let user_characteristic = "7e05e450-b517-403c-8a04-376285ac631d"
     let network_characteristic = "449d19d2-ac08-43ac-921d-4347f5ec86c6"
     let scan_characteristic = "3de7b790-66bf-4a80-80ae-5970e6d46097"
+    let uuid_characteristic = "ea473a3d-912b-41aa-9414-d9cbd20674aa"////
     let deviceId = "4F93D44E-0796-37A0-09D5-62371E492927"
 
     const deviceRef = useRef(null);
@@ -103,8 +104,11 @@ export default function BluetoothProper( {route, navigation}) {
             setIsConnected("Connected");
             sendSsidToGassolina(username);
             sendPassToGassolina(password);
+            sendUuidToGassolina(userUuid);//////
           }).then(() => {
-            navigation.navigate('Wifi');
+            navigation.navigate('Wifi', {
+              userUuid: userUuid,
+            });
           })
           .catch((error) => {
             console.error("Error connecting to device:", error);
@@ -137,6 +141,17 @@ export default function BluetoothProper( {route, navigation}) {
     const sendSsidToGassolina = (data) => {
       const encodedData = btoa(data + "@fire");// Base64 encode the data if needed
       bleManager.writeCharacteristicWithResponseForDevice(deviceId, "68544538-7148-4fc4-b555-a029b320b33e", user_characteristic, encodedData)
+      .then(() => {
+        console.log("Data written to characteristic successfully");
+      })
+      .catch((error) => {
+        console.log("Error writing data to characteristic:", error);
+      });
+    };
+
+    const sendUuidToGassolina = (data) => {
+      const encodedData = btoa(data);// Base64 encode the data if needed
+      bleManager.writeCharacteristicWithResponseForDevice(deviceId, "68544538-7148-4fc4-b555-a029b320b33e", uuid_characteristic, encodedData)
       .then(() => {
         console.log("Data written to characteristic successfully");
       })

@@ -5,7 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-export default function StartUp({ navigation}) {
+export default function StartUp({ route, navigation}) {
+
+  const { userUuid } = route.params;////
 
   const [username, setUsername] = useState('');
   const [cylinderWeight, setCylinderWeight] = useState(0);
@@ -21,6 +23,7 @@ export default function StartUp({ navigation}) {
       navigation.navigate('Main', {
         username: username,
         cylinderWeight: cylinderWeight,
+        userUuid: userUuid,
       });
     } catch (e) {
       console.log("Error saving data to AsyncStorage:", e);

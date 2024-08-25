@@ -14,7 +14,7 @@ import { useFirebase } from '../../Firebase/firebase';
 
 export default function Home({route, navigation}) {
 
-    const { username, cylinderWeight } = route.params;
+    const { username, cylinderWeight, userUuid } = route.params;
 
     const [loading, setLoading] = useState(true); // Set loading to true on component mount
     const [users, setUsers] = useState([]); // Initial empty array of users
@@ -28,9 +28,10 @@ export default function Home({route, navigation}) {
     const user = useFirebase();
 
     // console.log("first data",user);
+    let firstToken = '7nNXGvfQT4bHKC3iF8htlkjSJ6W2'
+    
 
    
-
 
     useEffect(() => {
       const unsubscribe = firestore().collection('7nNXGvfQT4bHKC3iF8htlkjSJ6W2').orderBy("timestamp", "asc").onSnapshot(
@@ -53,7 +54,7 @@ export default function Home({route, navigation}) {
               timestampArray.push(doc.data().timestamp.seconds);
             }
 
-            previousWeight = doc.data().myInteger - cylinderWeight;
+            previousWeight = (doc.data().myInteger - cylinderWeight) < 0 ? "empty" : doc.data().myInteger - cylinderWeight;
           });
           
 
@@ -61,11 +62,38 @@ export default function Home({route, navigation}) {
           setUsers(usersList);
           // console.log('Got Users collection result:', usersList);
           console.log(weightArray.length);
-          setPercentageWeight(Math.round((previousWeight - cylinderWeight)/(40 - cylinderWeight)*100));
+          setPercentageWeight(Math.round((previousWeight === "empty" ? 0 : previousWeight - cylinderWeight)/(40 - cylinderWeight)*100));
           setWeight(previousWeight);
           console.log("weight", (previousWeight - cylinderWeight));
           console.log(weightArray);
           console.log(timestampArray);
+
+
+
+          // Initialize timestamp and weight
+          let currentTimestamp = new Date('2024-07-01T07:00:00');
+          let currentWeight = 25.9;
+
+          // Function to send data to Firestore
+          // const sendDataToFirestore = () => {
+          //   const myInteger = currentWeight;
+          //   const timestamp = currentTimestamp;
+
+          //   firestore().collection('user 8').add({
+          //     myInteger,
+          //     timestamp
+          //   }).then(() => {
+          //     console.log('Data sent to Firestore');
+          //   }).catch((error) => {
+          //     console.error('Error sending data to Firestore:', error);
+          //   });
+
+          //   // Update timestamp and weight
+          //   currentTimestamp = new Date(currentTimestamp.getTime() + 7 * 60 * 60 * 1000); // Add 12 hours
+          //   currentWeight = parseFloat((currentWeight - 0.06).toFixed(2)); // Decrease weight by 0.1 and round to 2 decimal places
+          // };
+
+          // const intervalId = setInterval(sendDataToFirestore, 7000);
 
           //regression function
           const ss = require('simple-statistics');
@@ -93,7 +121,10 @@ export default function Home({route, navigation}) {
       );
   
       // Clean up the listener when the component unmounts
-      return () => unsubscribe();
+      return () => {
+        // clearInterval(intervalId);
+        unsubscribe();
+      };
     }, []);
 
     marginTop.value = withSpring((0));
@@ -136,12 +167,12 @@ export default function Home({route, navigation}) {
             <View style={styles.bottom}>
               <View style={styles.bottomTopBox}>
                 <Text style={styles.boxTitle}>Remaining Days Estimated:</Text>
-                <Text style={styles.boxDescription}>{daysRemaining} {daysRemaining === 1? "day": "days"}</Text> 
+                <Text style={styles.boxDescription}> {daysRemaining < 0 ? "not enough data" : daysRemaining === 1 ? "day" : "days"}</Text> 
               </View>
               <View style={styles.bottomDownBox}>
                 <View style={styles.leftBox}>
                 <Text style={styles.boxTitleBottom}>Current Weight:</Text>
-                <Text style={styles.boxDescription}>{weight}Kg</Text>
+                <Text style={styles.boxDescription}>{weight}{weight === "empty" ? "" : "kg"}</Text>
                 </View>
                 <View style={styles.rightBox}>
                 <Text style={styles.boxTitleBottom}>Battery Level:</Text>
@@ -184,7 +215,7 @@ const styles = StyleSheet.create({
         letterSpacing: 0.44,
     },
     middle: {
-        marginTop: 40,
+        marginTop: 30,
         alignItems: 'center',
         justifyContent: 'center',
         shadowColor: 'black',
@@ -221,12 +252,12 @@ const styles = StyleSheet.create({
       bottom: {
         flex: 1,
         alignItems: 'center',
-        marginTop: 30,
+        marginTop: 20,
         // justifyContent: 'center',
       },
       bottomTopBox: {
         width: 300,
-        height: 90,
+        height: 85,
         backgroundColor: '#F7F7F7',
         borderRadius: 20,
         padding: 15,
@@ -248,7 +279,7 @@ const styles = StyleSheet.create({
       },
       leftBox: {
         width: 145,
-        height: 90,
+        height: 85,
         padding: 10,
         backgroundColor: '#F7F7F7',
         borderRadius: 20,
@@ -263,7 +294,7 @@ const styles = StyleSheet.create({
       },
       rightBox: {
         width: 145,
-        height: 90,
+        height: 85,
         padding: 10,
         backgroundColor: '#F7F7F7',
         borderRadius: 20,

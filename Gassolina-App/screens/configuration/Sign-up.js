@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SignUp({ navigation }) {
     const [email, setEmail] = useState('');
+    const [userUuid, setUserUuid] = useState('');
     const [password, setPassword] = useState('');
     const [userInfo, setUserInfo] = useState([]);
 
@@ -22,8 +23,19 @@ export default function SignUp({ navigation }) {
             const user = userCredential.user;
             console.log('Registered with:', user.email);
             console.log('Registered with:', user.uid);
+            setUserUuid(user.uid)
             setUserInfo([email, password, user.uid]);
 
+        })
+        .then(() => {
+          console.log("uuid", userUuid);
+          console.log("email", email);
+          console.log("password", password);
+          navigation.navigate('BluetoothProper', {
+          username: email,
+          password: password,
+          userUuid: userUuid,
+        });
         })
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
@@ -37,13 +49,19 @@ export default function SignUp({ navigation }) {
         Keyboard.dismiss();
         setEmail('');
         setPassword('');
-        console.log("userinfo", userInfo);
-        console.log("email", email);
-        console.log("password", password);
-        navigation.navigate('BluetoothProper', {
-            username: email,
-            password: password,
-          });
+
+        // setTimeout(() => {
+        // console.log("uuid", userUuid);
+        // console.log("email", email);
+        // console.log("password", password);
+        // navigation.navigate('BluetoothProper', {
+        //   username: email,
+        //   password: password,
+        //   userUuid: userUuid,
+        // });
+        // }, 5000);
+        
+        
     }
 
     const saveData = async () => {

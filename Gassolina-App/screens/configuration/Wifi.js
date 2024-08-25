@@ -39,6 +39,7 @@ const sendWifiToGassolina = (ssid, password) => {
 
 //when password is submitted
 const onSubmitPassword = () => {
+
   sendWifiToGassolina(item.name, password); //didnt check this function yet
   Keyboard.dismiss();
   console.log(password);
@@ -62,7 +63,9 @@ const onSubmitPassword = () => {
   )
 }
 
-export default function Wifi({ navigation }) {
+export default function Wifi({ route, navigation }) {
+
+  const { userUuid } = route.params;////
 
   // Log route params to debug
   const [wifi, setWifi] = useState([]);
@@ -81,7 +84,9 @@ export default function Wifi({ navigation }) {
   };
 
   const navigateToBluetooth = () => {
-    navigation.navigate('Profile');
+    navigation.navigate('Profile', {
+      userUuid: userUuid,
+    });
   }
 
   const sendScanToGassolina = () => {
@@ -90,6 +95,11 @@ export default function Wifi({ navigation }) {
     .then(() => {
       console.log("Data written to characteristic successfully");
     })
+    .then(() => {
+      readCharacteristicValue();
+    }
+
+    )
     .catch((error) => {
       console.log("Error writing data to characteristic:", error);
     });
@@ -127,10 +137,7 @@ export default function Wifi({ navigation }) {
   };
 
   const displayWifi = () => {
-    // sendScanToGassolina();
-    setTimeout(() => {
-        readCharacteristicValue();
-      }, 4000);
+    sendScanToGassolina();
   }
 
   const ItemSeparator = () => {

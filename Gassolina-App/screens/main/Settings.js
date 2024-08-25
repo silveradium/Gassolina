@@ -7,6 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Settings({ navigation }) {
 
+  const [notifiable, setNotifiable] = useState(false);
+
   const logout = async () => {
     try {
       await AsyncStorage.setItem('@isLogged', "false" );
@@ -15,6 +17,10 @@ export default function Settings({ navigation }) {
       // saving error
       console.log(e);
     }
+  };
+
+  const notificationChange = () => {
+    setNotifiable(!notifiable);
   };
 
 
@@ -69,9 +75,9 @@ export default function Settings({ navigation }) {
                   />
                 </View>
               </View>
-              <TouchableOpacity style={styles.field}>
+              <TouchableOpacity style={styles.field} onPress={notificationChange}>
                 <Image
-                source={require('../../assets/icons/settings/notifications_on.png')}
+                source={!notifiable ? require('../../assets/icons/settings/notifications_on.png') : require('../../assets/icons/settings/notifications_off.png')}
                 resizeMode="contain"
                 style={{
                   width: 16,
@@ -79,7 +85,7 @@ export default function Settings({ navigation }) {
                   tintColor: '#4E4B4F',
                 }}
               />
-              <Text style={styles.descriptionText}>Turn on notifications</Text>
+              <Text style={styles.descriptionText}>{notifiable === false ? "Turn on notifications" : "Turn off notifications"}</Text>
           </TouchableOpacity>
             </View>
         </View>
