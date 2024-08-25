@@ -29,12 +29,13 @@ export default function Home({route, navigation}) {
 
     // console.log("first data",user);
     let firstToken = '7nNXGvfQT4bHKC3iF8htlkjSJ6W2'
+    let Silicongmail = "R6cz6Uqd16hIBrY8pi4PuC1PWpW2"
     
 
    
 
     useEffect(() => {
-      const unsubscribe = firestore().collection('7nNXGvfQT4bHKC3iF8htlkjSJ6W2').orderBy("timestamp", "asc").onSnapshot(
+      const unsubscribe = firestore().collection(Silicongmail).orderBy("timestamp", "asc").onSnapshot(
         (querySnapshot) => {
           const usersList = [];
           let weightArray = [];
@@ -47,12 +48,12 @@ export default function Home({route, navigation}) {
             weightArray.push(doc.data().myInteger - cylinderWeight);
             timestampArray.push(doc.data().timestamp.seconds);
 
-            if (previousWeight !== null && previousWeight < doc.data().myInteger - 10) {
-              weightArray.length = 0;
-              timestampArray.length = 0;
-              weightArray.push(doc.data().myInteger);
-              timestampArray.push(doc.data().timestamp.seconds);
-            }
+            // if (previousWeight !== null && previousWeight < doc.data().myInteger ) {
+            //   weightArray.length = 0;
+            //   timestampArray.length = 0;
+            //   weightArray.push(doc.data().myInteger);
+            //   timestampArray.push(doc.data().timestamp.seconds);
+            // }
 
             previousWeight = (doc.data().myInteger - cylinderWeight) < 0 ? "empty" : doc.data().myInteger - cylinderWeight;
           });
@@ -62,7 +63,11 @@ export default function Home({route, navigation}) {
           setUsers(usersList);
           // console.log('Got Users collection result:', usersList);
           console.log(weightArray.length);
-          setPercentageWeight(Math.round((previousWeight === "empty" ? 0 : previousWeight - cylinderWeight)/(40 - cylinderWeight)*100));
+          setPercentageWeight(Math.round(((previousWeight)/(5)*100)));
+          console.log("yo",previousWeight)
+          console.log("yolo",percentageWeight)
+          
+          // setPercentageWeight(Math.round((previousWeight === "empty" ? 0 :(previousWeight - cylinderWeight)/(40 - cylinderWeight)*100)));
           setWeight(previousWeight);
           console.log("weight", (previousWeight - cylinderWeight));
           console.log(weightArray);
@@ -71,15 +76,15 @@ export default function Home({route, navigation}) {
 
 
           // Initialize timestamp and weight
-          let currentTimestamp = new Date('2024-07-01T07:00:00');
-          let currentWeight = 25.9;
+          // let currentTimestamp = new Date('2024-07-01T07:34:00');
+          // let currentWeight = 25.9;
 
-          // Function to send data to Firestore
+          //Function to send data to Firestore
           // const sendDataToFirestore = () => {
           //   const myInteger = currentWeight;
           //   const timestamp = currentTimestamp;
 
-          //   firestore().collection('user 8').add({
+          //   firestore().collection(Silicongmail).add({
           //     myInteger,
           //     timestamp
           //   }).then(() => {
@@ -93,7 +98,7 @@ export default function Home({route, navigation}) {
           //   currentWeight = parseFloat((currentWeight - 0.06).toFixed(2)); // Decrease weight by 0.1 and round to 2 decimal places
           // };
 
-          // const intervalId = setInterval(sendDataToFirestore, 7000);
+          // const intervalId = setInterval(sendDataToFirestore, 4000);
 
           //regression function
           const ss = require('simple-statistics');
@@ -167,7 +172,7 @@ export default function Home({route, navigation}) {
             <View style={styles.bottom}>
               <View style={styles.bottomTopBox}>
                 <Text style={styles.boxTitle}>Remaining Days Estimated:</Text>
-                <Text style={styles.boxDescription}> {daysRemaining < 0 ? "not enough data" : daysRemaining === 1 ? "day" : "days"}</Text> 
+                <Text style={styles.boxDescription}> {daysRemaining < 0 ? "not enough data" : daysRemaining === 1 ? daysRemaining + " day" : daysRemaining + " days"}</Text> 
               </View>
               <View style={styles.bottomDownBox}>
                 <View style={styles.leftBox}>

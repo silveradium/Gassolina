@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function SignUp({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [userUuid, setUserUuid] = useState('');
 
     // when login is pressed
     const handleLogin = () => {
@@ -21,12 +22,19 @@ export default function SignUp({ navigation }) {
             const user = userCredential.user;
             console.log('Logged in with:', user.email);
             console.log('Logged in with:', user.uid);
-                    navigation.navigate('BluetoothProper', {
-            username: email,
-            password: password,
-          });
+            // setUserUuid(user.uid)
             saveData();
+            setTimeout(() => {
+              setUserUuid(user.uid)
+              navigation.navigate('BluetoothProper', {
+                    username: email,
+                    password: password,
+                    userUuid: userUuid,
+                  });
+            }, 5000)
         })
+
+        
         .catch(error => {
             console.log(error);
             setTimeout(() => {
